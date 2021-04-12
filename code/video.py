@@ -8,6 +8,15 @@ class Video:
         self.__views = 0
         self.__uid = uid
 
+    def disp(self):
+        print(f"name: {self.__name}")
+        print(f"uri: {self.__uri}")
+        print(f"duration: {self.__duration}")
+        print(f"description: {self.__desc}")
+        print(f"UID: {self.__uid}")
+        print(f"Likes: {self.__likes}")
+        print(f"Views: {self.__views}")
+
     def Play(self):
         None
     def Pause(self):
@@ -18,3 +27,5 @@ class Video:
         None
     def Forward(self):
         None
+        
+        
