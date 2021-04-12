@@ -117,6 +117,5 @@ consumer2.disp()
 consumer2.Add_To_Playlist('favourites', video1)
 consumer2.Play_All_Playlist('favourites')
 consumer2.Display_Playlist('favourites')
-consumer2.ManageHistory('display','mandalorian')
+consumer2.ManageHistory('display')
 print(consumer2.ManageHistory('search','mandalorian'))
-

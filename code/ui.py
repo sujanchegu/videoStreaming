@@ -11,3 +11,10 @@ def log_in():
 
 if (__name__ == '__main__'):
     app.run(debug = True);
+
+class ConsumerUI:
+    def __init__(self):
+        self.logged_in = defaultdict(lambda:'garbage')
+        self.recommender = defaultdict(lambda: 'garbage')
+    def login(self):
+        None
