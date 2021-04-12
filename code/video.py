@@ -20,6 +20,8 @@ class Video:
 
     def Play(self,history):
         history.add(self)
+        file_name = str(self.__uri) + '.mp4'
+        
     def Pause(self):
         None
     def Resume(self):
