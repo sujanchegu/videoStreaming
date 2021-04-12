@@ -34,13 +34,13 @@ class DBase():
         except Error as e:
             print(e)
 
-    def retreive_videopath(self, vid_uri):
-        try:
-            cur = self.__conn.cursor()
-            path = cur.execute("SELECT path FROM {_table} WHERE \
-            {condition}", _table = 'videos', condition = 'uri = ' + vid_uri)
-            return path
-        except Error as e:
-            print(e)
+    # def retreive_videopath(self, vid_uri):
+    #     try:
+    #         cur = self.__conn.cursor()
+    #         path = cur.execute("SELECT path FROM {_table} WHERE \
+    #         {condition}", _table = 'videos', condition = 'uri = ' + vid_uri)
+    #         return path
+    #     except Error as e:
+    #         print(e)
 
 db = DBase()
