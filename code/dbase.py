@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import os
+from bs4 import BeautifulSoup
 
 class DBase:
     def __init__(self):
@@ -34,8 +35,8 @@ class DBase:
         except Error as e:
             print("dbase::deleteVideoFromDB", e)
 
-    def calcSimilarity(self, iURI1, iURI2):
-        pass
+    def FindSimilar(self, iURI1):
+        return iURI
     
     def incAttr(self, iURI, iAttr, iCount=1):
         try:
@@ -48,7 +49,9 @@ class DBase:
         try:
             params = (iName, iEmail, iPassword, iRegDate, iCCard, iIsCreator)
             self.__conn.execute('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)', params)
+            self.__conn.execute(f'CREATE TABLE [{iEmail}] (uri TEXT, count INTEGER, session INTEGER)')
             self.__conn.commit()
+
         except Error as e:
             print("dbase::regUser", e)
 
@@ -70,6 +73,27 @@ class DBase:
         except Error as e:
             print("dbase::checkUser", e)
 
+    def retriveUser(self, iEmail):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT * FROM users WHERE email = {iEmail}')
+            return csor.fetchall()
+        except Error as e:
+            print("dbase::retriveUser", e)
+    
+    # def addHistoryToDB(self, iHistoryObject):
+    #     iEmail = iHistoryObject.__uid
+    #     csor = self.__conn.cursor()
+    #     csor.execute(f'SELECT MAX(session) FROM [{iEmail}]')
+    #     print(csor.fetchall())
+    #     for iURI,iCount in iHistoryObject.items():
+    #         csor.execute(f'SELECT EXISTS (SELECT 1 FROM users WHERE uri ="{iURI}")')
+    #         if(csor.fetchall()[0][0] == 0):
+    #             csor.execute(f'INSERT INTO [{iEmail}] values (?, ?, ?)', (iURI, icount, iSessionNo))
+    #         else:
+    #             csor.execute(f'UPDATE [{iEmail}] SET session = session + {iCount} WHERE uri = {iURI}')
+    #     self.__conn.commit()
+
     #DEBUG SHIT
     def print_table(self):
         cur = self.__conn.cursor()
@@ -77,6 +101,7 @@ class DBase:
         print(cur.fetchall())
         cur.execute('SELECT * from videos')
         print(cur.fetchall())
+
 
 
 db = DBase()
