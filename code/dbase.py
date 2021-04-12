@@ -51,7 +51,6 @@ class DBase:
             self.__conn.execute('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)', params)
             self.__conn.execute(f'CREATE TABLE [{iEmail}] (uri TEXT, count INTEGER, session INTEGER)')
             self.__conn.commit()
-
         except Error as e:
             print("dbase::regUser", e)
 
@@ -81,18 +80,24 @@ class DBase:
         except Error as e:
             print("dbase::retriveUser", e)
     
-    # def addHistoryToDB(self, iHistoryObject):
-    #     iEmail = iHistoryObject.__uid
-    #     csor = self.__conn.cursor()
-    #     csor.execute(f'SELECT MAX(session) FROM [{iEmail}]')
-    #     print(csor.fetchall())
-    #     for iURI,iCount in iHistoryObject.items():
-    #         csor.execute(f'SELECT EXISTS (SELECT 1 FROM users WHERE uri ="{iURI}")')
-    #         if(csor.fetchall()[0][0] == 0):
-    #             csor.execute(f'INSERT INTO [{iEmail}] values (?, ?, ?)', (iURI, icount, iSessionNo))
-    #         else:
-    #             csor.execute(f'UPDATE [{iEmail}] SET session = session + {iCount} WHERE uri = {iURI}')
-    #     self.__conn.commit()
+    def addHistoryToDB(self, iHistoryObject):
+        try:
+            iEmail = iHistoryObject.__uid
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT MAX(session) FROM [{iEmail}]')
+            print(csor.fetchall())
+            for iVideoObject,iCount in iHistoryObject.items():
+                iURI = iVideoObject.__name
+                csor.execute(f'SELECT EXISTS (SELECT 1 FROM users WHERE uri ="{iURI}")')
+                if(csor.fetchall()[0][0] == 0):
+                    csor.execute(f'INSERT INTO [{iEmail}] values (?, ?, ?)', (iURI, icount, iSessionNo))
+                    csor.commit()
+                else:
+                    csor.execute(f'UPDATE [{iEmail}] SET session = session + {iCount} WHERE uri = {iURI}')
+                    csor.commit()
+            self.__conn.commit()
+        except Error as e:
+            print("dbase::addHistoryToDB", e)
 
     #DEBUG SHIT
     def print_table(self):
