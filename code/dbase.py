@@ -35,8 +35,7 @@ class DBase:
     
     def incAttr(self, iURI, iAttr, iCount=1):
         try:
-            self.__conn.execute(f'UPDATE videos SET {iAttr} = {iAttr} \
-            + {iCount} WHERE uri = "{iURI}"')
+            self.__conn.execute(f'UPDATE videos SET {iAttr} = {iAttr} + {iCount} WHERE uri = "{iURI}"')
         except Error as e:
             print("incAttr", e)
 
@@ -65,10 +64,6 @@ class DBase:
             print("checkUser", e)
 
     #DEBUG SHIT
-    def sampleaddvideo(self):
-        self.__conn.execute("INSERT INTO videos VALUES (?, ?, ?, ?, ?, ?, ?)", ('sriram eating', '6248fads', 'bennur too', 123, 456, '9fbc67', 23.45))
-
-    #DEBUG SHIT
     def print_table(self):
         cur = self.__conn.cursor()
         cur.execute('SELECT * from users')
@@ -78,10 +73,10 @@ class DBase:
 
 
 db = DBase()
-db.regUser('abc', 'abcgmail.com', 'passwd', '12-12-2012', '456456456456', 0)
+db.regUser('abc', 'abc@gmail.com', 'passwd', '12-12-2012', '456456456456', 0)
 print(db.checkUser('9fbc67'))
-db.regCreator('abcgmail.com')
-print(db.checkUser('abcgmail.com'))
-db.sampleaddvideo()
+db.regCreator('abc@gmail.com')
+print(db.checkUser('abc@gmail.com'))
+db.addVideoToDB('sriram eating', '6248fads', 'bennur too', '9fbc67', 23.45, 123, 456)
 db.incAttr('6248fads', 'views', 5)
 db.print_table()
