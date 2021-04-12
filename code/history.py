@@ -1,3 +1,4 @@
+from video import *
 class History:
     def __init__(self,userid):
         self.__history = set()
@@ -21,3 +22,8 @@ class History:
     def Erase_History(self):
         self.__history = set()
         return "Erased"
+
+    def disp(self):
+        for vid in self.__history:
+            vid.disp()
+    

@@ -1,3 +1,4 @@
+from video import *
 class Playlist:
     def __init__(self):
         self.__num_of_vid = 0
@@ -13,5 +14,8 @@ class Playlist:
 
     def Play_All(self):
         for vid in self.__playlist:
-            print(vid)
             vid.Play()
+
+    def disp(self):
+        for vid in self.__playlist:
+            vid.disp()

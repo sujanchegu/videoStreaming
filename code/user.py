@@ -70,6 +70,9 @@ class Consumer(User):
     def Add_To_Playlist(self, playlist_name, vid):
         self._playlists[playlist_name].Add_To(vid)
 
+    def Display_Playlist(self,playlist_name):
+        self._playlists[playlist_name].disp()
+
     def Remove_From_Playlist(self, playlist_name, vid):
         self._playlists[playlist_name].Remove_From(vid)
 
@@ -111,3 +114,4 @@ consumer2.disp()
 
 consumer2.Add_To_Playlist('favourites', video1)
 consumer2.Play_All_Playlist('favourites')
+consumer2.Display_Playlist('favourites')
