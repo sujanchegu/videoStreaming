@@ -1,3 +1,4 @@
+from history import *
 class Video:
     def __init__(self,name,uri,duration,desc,uid):
         self.__name = name
@@ -17,8 +18,8 @@ class Video:
         print(f"Likes: {self.__likes}")
         print(f"Views: {self.__views}")
 
-    def Play(self):
-        None
+    def Play(self,history):
+        history.add(self)
     def Pause(self):
         None
     def Resume(self):

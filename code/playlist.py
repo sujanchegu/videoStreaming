@@ -1,4 +1,5 @@
 from video import *
+from history import *
 class Playlist:
     def __init__(self):
         self.__num_of_vid = 0
@@ -12,9 +13,9 @@ class Playlist:
         self.__playlist.remove(vid_obj)
         self.__num_of_vid -= 1
 
-    def Play_All(self):
+    def Play_All(self,history):
         for vid in self.__playlist:
-            vid.Play()
+            vid.Play(history)
 
     def disp(self):
         for vid in self.__playlist:

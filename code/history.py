@@ -1,6 +1,7 @@
 from video import *
 class History:
     def __init__(self,userid):
+        self.__uid = userid
         self.__history = set()
 
     def add(self,vid_obj):
@@ -8,13 +9,14 @@ class History:
 
     def Search_History(self,name):
         for vid in self.__history:
-            if(vid.__name == name):
-                return vid.__uri
+            #print(dir(vid))
+            if(vid._Video__name == name):
+                return vid._Video__uri
         return "404 : NOT FOUND"
 
     def Delete_From_History(self,name):
         for vid in self.__history:
-            if(vid.__name == name):
+            if(vid._Video__name == name):
                 self.__history.remove(vid)
                 return "Deleted from history"
         return "404 : NOT FOUND"
@@ -24,6 +26,7 @@ class History:
         return "Erased"
 
     def disp(self):
+        print("Displaying History: ")
         for vid in self.__history:
             vid.disp()
     

@@ -62,7 +62,9 @@ class Consumer(User):
             else:
                 return self._history.Delete_From_History(name_vid)
         elif(action == 'erase'):
-                return self._history.Erase_History()
+            return self._history.Erase_History()
+        elif(action == 'display'):
+            self._history.disp()
 
     # def Create_Playlist(self, name):
     #     self._playlists.append(Playlist(name))
@@ -77,7 +79,7 @@ class Consumer(User):
         self._playlists[playlist_name].Remove_From(vid)
 
     def Play_All_Playlist(self, playlist_name):
-        self._playlists[playlist_name].Play_All()
+        self._playlists[playlist_name].Play_All(self._history)
 
     def disp(self):
         print(f"{self._consumerName} {self._email}", end = ' ')
@@ -115,3 +117,6 @@ consumer2.disp()
 consumer2.Add_To_Playlist('favourites', video1)
 consumer2.Play_All_Playlist('favourites')
 consumer2.Display_Playlist('favourites')
+consumer2.ManageHistory('display','mandalorian')
+print(consumer2.ManageHistory('search','mandalorian'))
+
