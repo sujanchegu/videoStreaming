@@ -6,10 +6,10 @@ class DBase():
         __conn = None
         try:
             __conn = sqlite3.connect('../assets/database.db')
-        __conn.execute('DROP TABLE videos')
-        __conn.execute('CREATE TABLE videos (name TEXT, uri TEXT,\
-         desc TEXT, likes INTEGER, views INTEGER, path BLOB, \
-         uid TEXT, dur REAL)')
+            __conn.execute('DROP TABLE videos')
+            __conn.execute('CREATE TABLE videos (name TEXT, uri TEXT,\
+            desc TEXT, likes INTEGER, views INTEGER, path BLOB, \
+            uid TEXT, dur REAL)')
         except Error as e:
             print(e)
 
@@ -17,8 +17,12 @@ class DBase():
         pass
 
     def deleteFromDB(self, vid_uri):
-        pass
-        
+        try:
+            __conn.execute('DELETE FROM {table} WHERE {condition}',
+            table = 'videos', condition = 'uri = ' + vid_uri)
+        except Error as e:
+            print(e)
+
     def calcSimilarity(self, vid_uri1, vid_uri2):
         pass
     
