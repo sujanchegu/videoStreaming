@@ -1,8 +1,10 @@
 from history import *
+from dbase import *
+
 class Video:
     def __init__(self,name,uri,duration,desc,uid):
         self.__name = name
-        self.__uri = uri
+        self._videoURI = uri
         self.__duration = duration
         self.__desc = desc
         self.__likes = 0
@@ -11,7 +13,7 @@ class Video:
 
     def disp(self):
         print(f"name: {self.__name}")
-        print(f"uri: {self.__uri}")
+        print(f"uri: {self._videoURI}")
         print(f"duration: {self.__duration}")
         print(f"description: {self.__desc}")
         print(f"UID: {self.__uid}")
@@ -20,7 +22,7 @@ class Video:
 
     def Play(self,history):
         history.add(self)
-        file_name = str(self.__uri) + '.mp4'
+        file_name = str(self._videoURI) + '.mp4'
         
     def Pause(self):
         None
@@ -30,5 +32,4 @@ class Video:
         None
     def Forward(self):
         None
-        
         
