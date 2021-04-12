@@ -24,6 +24,12 @@ class History:
                 return "Deleted from history"
         return "404 : NOT FOUND"
 
+    def Fetch_Ten(self):
+        vid_obj_list = list(self.__history.keys())
+        if(len(vid_obj_list)>9):
+            return vid_obj_list[0:11]
+        return "history length lesser than 10"
+
     def Erase_History(self):
         self.__history = {}
         return "Erased"
