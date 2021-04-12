@@ -9,13 +9,20 @@ class DBase:
             
             self.__conn.execute('DROP TABLE IF EXISTS videos')
             self.__conn.execute('''CREATE TABLE videos (name TEXT, uri TEXT,
-            desc TEXT, likes INTEGER, views INTEGER, uid TEXT, dur REAL)''')
+            desc TEXT, likes INTEGER, views INTEGER, email TEXT, dur REAL)''')
 
             self.__conn.execute('DROP TABLE IF EXISTS users')
-            self.__conn.execute('''CREATE TABLE users (name TEXT, email TEXT,
-            uid TEXT, passwd TEXT, regDate TEXT, creditCard TEXT, isCreator INTEGER)''')
+            self.__conn.execute('''CREATE TABLE users (name TEXT, email TEXT CONSTRAINT email_is_pkey PRIMARY KEY,
+            passwd TEXT, regDate TEXT, creditCard TEXT, isCreator INTEGER)''')
         except Error as e:
             print("__init__", e)
+
+    def addVideoToDB(self, iName, iURI, iDesc, iEmail, iDur, iLikes=0, iViews=0):
+        try:
+            params = (iName, iURI, iDesc, iLikes, iViews, iEmail, iDur)
+            self.__conn.execute('INSERT INTO videos VALUES (?, ?, ?, ?, ?, ?, ?)', params)
+        except Error as e:
+            print(e)
 
     def deleteVideoFromDB(self, iURI):
         try:
@@ -28,38 +35,33 @@ class DBase:
     
     def incAttr(self, iURI, iAttr, iCount=1):
         try:
-            self.__conn.execute(f'UPDATE videos SET {iAttr} = {iAttr} \
-            + {iCount} WHERE uri = "{iURI}"')
+            self.__conn.execute(f'UPDATE videos SET {iAttr} = {iAttr} + {iCount} WHERE uri = "{iURI}"')
         except Error as e:
             print("incAttr", e)
 
-    def regUser(self, iName, iEmail, iUID, iPassword, iRegDate, iCCard, iIsCreator):
+    def regUser(self, iName, iEmail, iPassword, iRegDate, iCCard=None, iIsCreator=0):
         try:
-            params = (iName, iEmail, iUID, iPassword, iRegDate, iCCard, iIsCreator)
-            self.__conn.execute('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)', params)
+            params = (iName, iEmail, iPassword, iRegDate, iCCard, iIsCreator)
+            self.__conn.execute('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)', params)
         except Error as e:
             print("regUser", e)
 
-    def regCreator(self, iUID):
+    def regCreator(self, iEmail):
         try:
-            self.__conn.execute('UPDATE users SET isCreator = 1 WHERE uid = "{iUID}"')
+            self.__conn.execute(f'UPDATE users SET isCreator = 1 WHERE email = "{iEmail}"')
         except Error as e:
             print("regCreator", e)
 
-    def checkUser(self, iUID):
+    def checkUser(self, iEmail):
         try:
             csor = self.__conn.cursor()
-            csor.execute('SELECT EXISTS (SELECT 1 FROM users WHERE uid ="{iUID}")')
+            csor.execute(f'SELECT EXISTS (SELECT 1 FROM users WHERE email ="{iEmail}")')
             if(csor.fetchall()[0][0] == 0):
                 return False
             else:
                 return True
         except Error as e:
             print("checkUser", e)
-
-    #DEBUG SHIT
-    def addvideo(self):
-        self.__conn.execute("INSERT INTO videos VALUES (?, ?, ?, ?, ?, ?, ?)", ('sriram eating', '6248fads', 'bennur too', 123, 456, '9fbc67', 23.45))
 
     #DEBUG SHIT
     def print_table(self):
@@ -71,10 +73,10 @@ class DBase:
 
 
 db = DBase()
-db.regUser('abc', 'abcgmail.com', '9fbc67', 'passwd', '12-12-2012', '456456456456', 0)
+db.regUser('abc', 'abc@gmail.com', 'passwd', '12-12-2012', '456456456456', 0)
 print(db.checkUser('9fbc67'))
-db.regCreator('9fbc67')
-print(db.checkUser('68ad45'))
-db.addvideo()
+db.regCreator('abc@gmail.com')
+print(db.checkUser('abc@gmail.com'))
+db.addVideoToDB('sriram eating', '6248fads', 'bennur too', '9fbc67', 23.45, 123, 456)
 db.incAttr('6248fads', 'views', 5)
 db.print_table()
