@@ -13,8 +13,11 @@ class User:
         self._loginStatus = loginStatus
         self._registerDate = registerDate
 
-    def register(self, id, pswd):
-            self._userid = id
+    def register(self, id, pswd, email = None):
+            if(email):
+                self._userid = email
+            else:
+                self._userid = id
             self._password = pswd
             self._registerDate = datetime.now()
 
@@ -41,7 +44,7 @@ class Consumer(User):
     def register(self, name, email, password):
         self._consumerName = name
         self._email = email
-        User.register(self, secrets.token_hex(nbytes=16), password)
+        User.register(self, secrets.token_hex(nbytes=16), password, email)
 
     def ManageHistory(self, action = '', name_vid = ''):
         if(action == ''):
