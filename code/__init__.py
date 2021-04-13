@@ -10,10 +10,21 @@ db.regUser('abc', 'abc@gmail.com', 'passwd', '12-12-2012', '456456456456', 0)
 print(db.checkUser('def@gmail.com'))
 db.regCreator('abc@gmail.com')
 print(db.checkUser('abc@gmail.com'))
-db.addVideo('sriram eating', 'video1', 'bennur too', 'abc@gmail.com', 23.45, 123, 456)
-db.addVideo('shashank eating', 'video2', 'sriram too', 'abc@gmail.com', 23.45, 123, 456)
-db.addVideo('bennur eating', 'video3', 'shashank too', 'abc@gmail.com', 23.45, 123, 456)
-db.addVideo('sujan eating', 'video4', 'sujan too', 'abc@gmail.com', 23.45, 123, 456)
+
+
+db.addVideo('sriram eating', 'video1', 'bennur too', 'abc@gmail.com', 23.45, 123, 876)
+db.addVideo('shashank eating', 'video2', 'sriram too', 'abc@gmail.com', 23.45, 98, 97)
+db.addVideo('bennur eating', 'video3', 'shashank too', 'abc@gmail.com', 23.45, 657, 123)
+db.addVideo('sujan1', 'video5', 'sujan too', 'abc@gmail.com', 23.45, 23, 4566)
+db.addVideo('sujan2', 'video6', 'sujan too', 'abc@gmail.com', 23.45, 345, 3344)
+db.addVideo('sujan3', 'video7', 'sujan too', 'abc@gmail.com', 23.45, 567, 7885)
+db.addVideo('sujan4', 'video8', 'sujan too', 'abc@gmail.com', 23.45, 323, 234)
+db.addVideo('sujan5', 'video9', 'sujan too', 'abc@gmail.com', 23.45, 67, 789)
+db.addVideo('sujan6', 'video10', 'sujan too', 'abc@gmail.com', 23.45, 22344, 211)
+db.addVideo('sujan7', 'video11', 'sujan too', 'abc@gmail.com', 23.45, 99, 456)
+
+
+
 os.system('touch ../assets/videos/video4.mp4')
 db.deleteVideo('video4')
 db.incAttr('video1', 'views', 5)
@@ -36,10 +47,10 @@ sampleHistoryObject2 = History('abc@gmail.com')
 sampleHistoryObject2.add(sampleVideoObject2)
 sampleHistoryObject2.add(sampleVideoObject3)
 
-db.addHistory(sampleHistoryObject1)
+# db.addHistory(sampleHistoryObject1)
 print(db.retrieveHistory('abc@gmail.com'))
 
-db.addHistory(sampleHistoryObject2)
+# db.addHistory(sampleHistoryObject2)
 print(db.retrieveHistory('abc@gmail.com'))
 
 #PLAYLIST
