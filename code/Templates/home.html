@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+  </head>
+  <body>
+    <style>
+      form
+      {
+        border : 1px solid black;
+        border-radius : 15px;
+        padding : 30px;
+        position: relative;
+        left : 35%;
+        width : 25%;
+        align-items: center;
+      }
+      h1
+      {
+        position : relative;
+        left : 42%;
+      }
+    </style>
+    <h1>Video Streamer</h1>
+
+    <form method = 'POST' action = '/verify_user'>
+      <h2> Sign Up </h2>
+      <label for="name">Name</label><br>
+      <input type="text" id="name" name="name" required><br>
+      <label for="email">Email</label><br>
+      <input type="email" id="email" name="email" required><br><br>
+      <label for="pwd">Password</label><br>
+      <input type="password" id="pwd" name="pwd" required><br><br>
+      <input type="submit" value="Submit"> <br><br>
+      <a href = "log_in"> Have an account? Click here </a>
+    </form>
+
+  </body>
+</html>
