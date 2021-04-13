@@ -13,7 +13,7 @@ class DBase:
             self.__conn = sqlite3.connect('../assets/database.db', check_same_thread=False)
 
             self.__conn.execute('''CREATE TABLE videos (name TEXT, uri TEXT,
-            desc TEXT, likes INTEGER, views INTEGER, email TEXT, dur REAL)''')
+            desc TEXT, likes INTEGER, views INTEGER, email TEXT, dur REAL, uploadDate TEXT)''')
 
             self.__conn.execute('''CREATE TABLE users (name TEXT, email TEXT CONSTRAINT email_is_pkey PRIMARY KEY,
             passwd TEXT, regDate TEXT, creditCard TEXT, isCreator INTEGER)''')
@@ -22,10 +22,10 @@ class DBase:
 
 
 
-    def addVideo(self, iName, iURI, iDesc, iEmail, iDur, iLikes=0, iViews=0):
+    def addVideo(self, iName, iURI, iDesc, iEmail, iDur, iUploadDate, iLikes=0, iViews=0):
         try:
-            params = (iName, iURI, iDesc, iLikes, iViews, iEmail, iDur)
-            self.__conn.execute('INSERT INTO videos VALUES (?, ?, ?, ?, ?, ?, ?)', params)
+            params = (iName, iURI, iDesc, iLikes, iViews, iEmail, iDur, iUploadDate)
+            self.__conn.execute('INSERT INTO videos VALUES (?, ?, ?, ?, ?, ?, ?, ?)', params)
             self.__conn.commit()
         except Error as e:
             print("dbase::addVideo", e)
@@ -106,8 +106,8 @@ class DBase:
             csor = self.__conn.cursor()
             csor.execute(f'SELECT * FROM users WHERE email = "{iEmail}"')
             record = csor.fetchall()
-            csor.close();
-            return record[0];
+            csor.close()
+            return record[0]
         except Error as e:
             print("dbase::retriveUser", e)
 
@@ -116,11 +116,11 @@ class DBase:
         # Keys allowed in kwargs along with types are:
             # name TEXT,
             # passwd TEXT,
-            # regDate TEXT,
             # creditCard TEXT,
             # isCreator INTEGER
         try:
             kwargs.pop('email', None)
+            kwargs.pop('regDate', None)
             if ('isCreator' in kwargs.keys()):
                 self.__conn.execute(f'UPDATE users SET isCreator = {kwargs["isCreator"]} WHERE email = "{iEmail}"')
                 del kwargs['isCreator']
@@ -230,7 +230,7 @@ class DBase:
                 if (re.match('^' + iEmail, table)):
                     returnList.append(table)
             return returnList
-        except Error as e:
+        except Error as e:likes INTEGER
             print("dbase::retriveListOfPlaylists", e)
 
  # def __del__(self):
