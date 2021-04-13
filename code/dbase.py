@@ -1,6 +1,7 @@
+import os
+import re
 import sqlite3
 from sqlite3 import Error
-import os
 
 class DBase:
     def __init__(self):
@@ -19,6 +20,8 @@ class DBase:
         except Error as e:
             print("dbase::__init__", e)
 
+
+
     def addVideo(self, iName, iURI, iDesc, iEmail, iDur, iLikes=0, iViews=0):
         try:
             params = (iName, iURI, iDesc, iLikes, iViews, iEmail, iDur)
@@ -35,6 +38,22 @@ class DBase:
         except Error as e:
             print("dbase::deleteVideo", e)
 
+    def retrieveUploadedVideos(self, iEmail):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT * FROM videos WHERE email = "{iEmail}"')
+            return csor.fetchall()
+        except Error as e:
+            print("dbase::retrieveUploadedVideos")
+
+    def retrieveAllVideos(self):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT * FROM videos')
+            return csor.fetchall()
+        except Error as e:
+            print("dbase::retrieveAllVideos")
+
     def FindSimilar(self, iURI1):
         return iURI
     
@@ -44,6 +63,8 @@ class DBase:
             self.__conn.commit()
         except Error as e:
             print("dbase::incAttr", e)
+
+
 
     def regUser(self, iName, iEmail, iPassword, iRegDate, iCCard=None, iIsCreator=0):
         try:
@@ -79,7 +100,34 @@ class DBase:
             return csor.fetchall()
         except Error as e:
             print("dbase::retrieveUser", e)
+
+    def changeUserDetails(self, iEmail, **kwargs):
+        # email change is not allowed
+        # Keys allowed in kwargs along with types are:
+            # name TEXT, 
+            # passwd TEXT,
+            # regDate TEXT, 
+            # creditCard TEXT,
+            # isCreator INTEGER
+        try:
+            kwargs.pop('email', None)
+            if ('isCreator' in kwargs.keys()):
+                self.__conn.execute(f'UPDATE users SET isCreator = {kwargs['isCreator']} WHERE email = "{iEmail}"')
+                del kwargs['isCreator']
+            for iAttr, iAttrValue in kwargs.items():
+                self.__conn.execute(f'UPDATE users SET {iAttr} = "{iAttr}" WHERE email = "{iEmail}"')
+            self.__conn.commit()
+        except Error as e:
+            print("dbase::changeUserDetails", e)
+
+    def checkCreator(self, iEmail):
+        try:
+            return (self.retrieveUser(iEmail)[5] == 1)
+        except Error as e:
+            print("dbase::checkCreator", e)
     
+
+
     def addHistory(self, iHistoryObject):
         try:
             iEmail = iHistoryObject._personUID
@@ -114,9 +162,12 @@ class DBase:
         except Error as e:
             print("dbase::retrieveHistory", e)
 
+
+
     def createPlaylist(self, iEmail, iPlaylistName):
         try:
             self.__conn.execute(f'CREATE TABLE [{iEmail + iPlaylistName}] (uri TEXT)')
+            self.__conn.commit()
         except Error as e:
             print("dbase::createPlaylist", e)
     
@@ -129,6 +180,7 @@ class DBase:
             csor.execute(f'SELECT EXISTS (SELECT 1 FROM [{iEmail + iPlaylistName}] WHERE uri ="{iURI}")')
             if(csor.fetchall()[0][0] == 0):
                 self.__conn.execute(f'INSERT INTO [{iEmail + iPlaylistName}] VALUES (?)', (iURI,))
+                self.__conn.commit()
         except Error as e:
             print("dbase::addToPlaylist", e)
 
@@ -138,6 +190,7 @@ class DBase:
             iEmail = iPlaylist._email
             iURI = iVideoObject._videoURI
             self.__conn.execute(f'DELETE FROM [{iEmail + iPlaylistName}] where uri = "{iURI}"')
+            self.__conn.commit()
         except Error as e:
             print("dbase::removeFromPlaylist", e)
     
@@ -149,14 +202,34 @@ class DBase:
         except:
             print("dbase::retrievePlaylist", e)
 
-    # def __del__(self):
+    def retriveListOfPlaylists(self, iEmail):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute('.tables')
+            returnList = []
+            for table in csor.fetchall():
+                if (re.match('^' + iEmail, table)):
+                    returnList.append(table)
+            return returnList
+        except Error as e:
+            print("dbase::retriveListOfPlaylists", e)
+
+ # def __del__(self):
     #     os.system('rm ../assets/database.db')
+
+
+
+    
+
         
 
     #DEBUG SHIT
     def print_table(self, iName):
         csor = self.__conn.cursor()
-        csor.execute(f'SELECT * from {iName}')
+        if ('@' in iName):
+            csor.execute(f'SELECT * from [{iName}]')
+        else:
+            csor.execute(f'SELECT * from {iName}')
         print(csor.fetchall())
 
 db = DBase()
