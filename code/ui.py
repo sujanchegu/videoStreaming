@@ -19,23 +19,29 @@ class ConsumerUI:
         self.fetch_updates(dude)
         print("Render Buffer : ",self.render_buffer)
 
+    def logout(self,email):
+        del self.logged_in[email]
+        print("In ConsumerUI > logout : ",self.logged_in)
+
     def login(self, email):
         # print("email : ",email)
-        user_record = db.retriveUser(email);
-        # print("User record : ", user_record);
+        user_record = db.retrieveUser(email);
+        print("User record : ", user_record);
         self.logged_in[email] = Consumer(user_record[0], user_record[1], user_record[2], user_record[3], user_record[4])
 
-        consumer1 = Consumer()
-        consumer1.register('sriram', 'sriram@gmail.com', 'allahwhoakbar')
-        consumer1.disp()
-        creator1 = Creator('123', consumer1)
-        creator1.disp()
-        video1 = creator1.Create_video('mandalorian', '1', '58:00', 'awesome show' )
-        video2 = creator1.Create_video('GOT', '2', '58:00', 'S8 Sucks' )
-        self.logged_in[email].Add_To_Playlist('favourites', video1)
-        self.logged_in[email].Add_To_Playlist('favourites', video2)
-
-        self.logged_in[email].Play_All_Playlist('favourites')
+        # consumer1 = Consumer()
+        # consumer1.register('sriram', 'sriram@gmail.com', 'allahwhoakbar')
+        # consumer1.disp()
+        # creator1 = Creator('123', consumer1)
+        # creator1.disp()
+        # video1 = creator1.Create_video('mandalorian', '1', '58:00', 'awesome show' )
+        # video2 = creator1.Create_video('GOT', '2', '58:00', 'S8 Sucks' )
+        #
+        # self.logged_in[email].Create_Playlist('favourites')
+        # self.logged_in[email].Add_To_Playlist('favourites', video1)
+        # self.logged_in[email].Add_To_Playlist('favourites', video2)
+        #
+        # self.logged_in[email].Play_All_Playlist('favourites')
 
         self.fetch_updates(self.logged_in[email])
         print("Render Buffer : ",self.render_buffer)
@@ -60,16 +66,17 @@ def verify_user():
     name = request.form['name']
     pwd = request.form['pwd']
 
-    db.print_table()
-
     if(not db.checkUser(email)):
         cons.register(name, email, pwd)
         print("DB : ", db)
         print("db_table : ")
-        db.print_table()
-        return '''<h1 style = 'color : green; font-family : Arial;'> Account created ! </h1>
-            <a href = '/dashboard'> Go to dashboard </a>
-        '''
+        db.print_table("users")
+
+        return f"<h1 style = 'color : green; font-family : Arial;'> Account created ! </h1> \
+        <a href = '/dashboard'> Go to dashboard </a> \
+        <script> document.cookie = \"email = {email}\"; \
+        console.log(document.cookie) </script> \
+        "
     else:
         return '''
         <h1 style = 'color : red; font-family : Arial;'> Account already exists! Try signing in. </h1>
@@ -86,17 +93,21 @@ def verify_user1():
         '''
     else:
         cons.login(email)
-        return '''<h1 style = 'color : green; font-family : Arial;'> Logged in successfully ! </h1>
-        <a href = '/dashboard'> Go to dashboard </a>
-        '''
+        return f"<h1 style = 'color : green; font-family : Arial;'> Logged in successfully ! </h1> \
+        <a href = '/dashboard'> Go to dashboard </a> \
+        <script> document.cookie = \"email = {email}\"; \
+        console.log(document.cookie) </script> \
+        "
 
 @app.route("/dashboard")
 def dashboard():
-    return '''
-    <h1>Your Dashboard</h1>
-    <a href = '/'> Logout </a>
-    '''
+    return render_template('dashboard.html')
 
+@app.route("/logout")
+def logout():
+    email = request.cookies.get('email')
+    cons.logout(email)
+    return render_template('home.html')
 
 if(__name__ == '__main__'):
     app.run(debug = True);

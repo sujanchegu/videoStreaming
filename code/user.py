@@ -38,8 +38,8 @@ class Consumer(User):
             self._email = email
             User.__init__(self, userid, password, loginStatus, registerDate)
             self._history = History(self._userid)
-            self._playlists = defaultdict(lambda : Playlist())
-
+            self._playlists = {}
+            # defaultdict(lambda : Playlist("ABCD","abc@gmail.com"))
 
     def register(self, name, email, password):
         self._consumerName = name
@@ -69,20 +69,32 @@ class Consumer(User):
         elif(action == 'display'):
             self._history.disp()
 
-    # def Create_Playlist(self, name):
-    #     self._playlists.append(Playlist(name))
+    def Create_Playlist(self, name):
+        self._playlists[name] = Playlist(name, self._email)
 
     def Add_To_Playlist(self, playlist_name, vid):
-        self._playlists[playlist_name].Add_To(vid)
+        if(playlist_name in self._playlists):
+            self._playlists[playlist_name].Add_To(vid)
+        else:
+            print("Err in Add_To_Playlist")
 
     def Display_Playlist(self,playlist_name):
-        self._playlists[playlist_name].disp()
+        if(playlist_name in self._playlists):
+            self._playlists[playlist_name].disp()
+        else:
+            print("Err in Display_Playlist")
 
     def Remove_From_Playlist(self, playlist_name, vid):
-        self._playlists[playlist_name].Remove_From(vid)
+        if(playlist_name in self._playlists):
+            self._playlists[playlist_name].Remove_From(vid)
+        else:
+            print("Err in Remove_From_Playlist")
 
     def Play_All_Playlist(self, playlist_name):
-        self._playlists[playlist_name].Play_All(self._history)
+        if(playlist_name in self._playlists):
+            self._playlists[playlist_name].Play_All(self._history)
+        else:
+            print("Err in Play_All_Playlist")
 
     def disp(self):
         print(f"{self._consumerName} {self._email}", end = ' ')

@@ -12,6 +12,6 @@ class Recommender:
         recent_history = self.Poll_History(user)
         self.vid_buffer.clear()
         for vid in recent_history:
-            temp_vid = db.FindSimilar(vid._Video__uri)
+            temp_vid = db.FindSimilar(vid._videoURI)
             self.vid_buffer.add(temp_vid)
         return self.vid_buffer
