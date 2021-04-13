@@ -7,7 +7,7 @@ from collections import defaultdict
 from video import *
 
 class User:
-    def __init__(self, userid = '', password = '',loginStatus = False , registerDate = ''):
+    def __init__(self, userid = '', password = '',loginStatus = True , registerDate = ''):
         self._userid = userid
         self._password = password
         self._loginStatus = loginStatus
@@ -26,7 +26,7 @@ class User:
 
 
 class Consumer(User):
-    def __init__(self, consumer = None):
+    def __init__(self, consumerName = '',email = '', userid = '' , password = '', loginStatus = True, registerDate = '' , consumer = None):
         if(consumer):
             self._consumerName = consumer._consumerName
             self._email = consumer._email
@@ -34,9 +34,9 @@ class Consumer(User):
             self._playlists = consumer._playlists
             User.__init__(self, consumer._userid, consumer._password, consumer._loginStatus, consumer._registerDate)
         else:
-            self._consumerName = ''
-            self._email = ''
-            User.__init__(self)
+            self._consumerName = consumerName
+            self._email = email
+            User.__init__(self, userid, password, loginStatus, registerDate)
             self._history = History(self._userid)
             self._playlists = defaultdict(lambda : Playlist())
 
@@ -103,22 +103,22 @@ class Creator(Consumer):
 
 
 
-consumer1 = Consumer()
-consumer1.register('sriram', 'sriram@gmail.com', 'allahwhoakbar')
-consumer1.disp()
-
-
-creator1 = Creator('123', consumer1)
-creator1.disp()
-
-video1 = creator1.Create_video('mandalorian', '1', '58:00', 'awesome show' )
-
-consumer2 = Consumer()
-consumer2.register("Aditya", 'thecodeyoda', 'bitchassnigga')
-consumer2.disp()
-
-consumer2.Add_To_Playlist('favourites', video1)
-consumer2.Play_All_Playlist('favourites')
-consumer2.Display_Playlist('favourites')
-consumer2.ManageHistory('display')
-print(consumer2.ManageHistory('search','mandalorian'))
+# consumer1 = Consumer()
+# consumer1.register('sriram', 'sriram@gmail.com', 'allahwhoakbar')
+# consumer1.disp()
+#
+#
+# creator1 = Creator('123', consumer1)
+# creator1.disp()
+#
+# video1 = creator1.Create_video('mandalorian', '1', '58:00', 'awesome show' )
+#
+# consumer2 = Consumer()
+# consumer2.register("Aditya", 'thecodeyoda', 'bitchassnigga')
+# consumer2.disp()
+#
+# consumer2.Add_To_Playlist('favourites', video1)
+# consumer2.Play_All_Playlist('favourites')
+# consumer2.Display_Playlist('favourites')
+# consumer2.ManageHistory('display')
+# print(consumer2.ManageHistory('search','mandalorian'))

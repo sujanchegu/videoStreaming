@@ -16,7 +16,7 @@ if (__name__ == '__main__'):
 class ConsumerUI:
     def __init__(self):
         self.logged_in = defaultdict(lambda:'garbage')
-        self.recommender = defaultdict(lambda: 'garbage')
+        self.recommender = Recommeder()
 
     def register(self, name, email, pwd):
         dude = Consumer() # object of consumer, useris and registerDate will be automatically filled

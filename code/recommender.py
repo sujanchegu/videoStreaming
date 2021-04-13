@@ -1,15 +1,15 @@
 class Recommender:
     def __init__(self):
-        self.vid_buffer = []
+        self.vid_buffer = set()
 
     def Poll_History(self, user):
         recent_history = user._history.Fetch_Ten()
         return recent_history
 
-    def send_updates(self, user):
+    def update(self, user):
         recent_history = self.Poll_History(user)
-
+        self.vid_buffer.clear()
         for vid in recent_history:
-            temp_vid = db.FindSimilar(vid)
-
-        return send_updates
+            temp_vid = db.FindSimilar(vid._uri)
+            self.vid_buffer.add(temp)
+        return self.vid_buffer
