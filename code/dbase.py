@@ -46,13 +46,21 @@ class DBase:
         except Error as e:
             print("dbase::retrieveUploadedVideos")
 
+    def retrieveParticularVideo(self, iURI):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT * FROM videos WHERE uri = {iURI}')
+            return csor.fetchall()[0]
+        except Error as e:
+            print("dbase::retrieveParticularVideo", e)
+
     def retrieveAllVideos(self):
         try:
             csor = self.__conn.cursor()
             csor.execute(f'SELECT * FROM videos')
             return csor.fetchall()
         except Error as e:
-            print("dbase::retrieveAllVideos")
+            print("dbase::retrieveAllVideos", e)
 
     def FindSimilar(self, iURI1):
         return iURI1
@@ -163,6 +171,15 @@ class DBase:
             return (recentViewed, mostViewed)
         except Error as e:
             print("dbase::retrieveHistory", e)
+
+    def removeHistory(self, iEmail):
+        try:
+            self.__conn.execute(f'DROP TABLE [{iEmail}]')
+            self.__conn.execute(f'CREATE TABLE [{iEmail}] (uri TEXT, count INTEGER, session INTEGER)')
+            self.__conn.commit()
+        except Error as e:
+            print("dbase::removeHistory", e)
+
 
 
 
