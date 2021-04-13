@@ -54,7 +54,7 @@ class DBase:
         except Error as e:
             print("dbase::retrieveAllVideos")
 
-    def FindSimilar(self, iURI1):
+    def FindSimilar(self, iURI):
         return iURI
     
     def incAttr(self, iURI, iAttr, iCount=1):
