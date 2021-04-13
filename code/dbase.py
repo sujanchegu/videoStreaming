@@ -2,6 +2,7 @@ import os
 import re
 import sqlite3
 from sqlite3 import Error
+from scipy import spatial
 
 class DBase:
     def __init__(self):
@@ -62,8 +63,29 @@ class DBase:
         except Error as e:
             print("dbase::retrieveAllVideos", e)
 
-    def FindSimilar(self, iURI1):
-        return iURI1
+    def FindSimilar(self, iURI, inp_vector):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT uri,dur, likes, views FROM videos WHERE uri != "{iURI}"')
+            vectors = csor.fetchall()
+            store = {}
+            for vector in vectors:
+                store[vector[0]] = [vector[1], vector[2], vector[3]]
+            min  = 1.0
+            ret_uri = ''
+            for vid in store:
+                temp = spatial.distance.cosine(inp_vector, store[vid])
+                if(temp < min):
+                    min = temp
+                    ret_uri = vid
+
+            csor2 = self.__conn.cursor()
+            csor2.execute(f'SELECT * FROM videos WHERE uri = "{ret_uri}"')
+            return csor2.fetchall()
+
+        except Error as e:
+            print("dbase::incAttr", e)
+        return iURI
 
     def incAttr(self, iURI, iAttr, iCount=1):
         try:
