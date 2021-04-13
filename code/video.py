@@ -2,13 +2,13 @@ from history import *
 from dbase import *
 
 class Video:
-    def __init__(self,name,uri,duration,desc,uid):
+    def __init__(self,name,uri,duration,desc,uid, likes = 0, views = 0):
         self._name = name
         self._videoURI = uri
         self._duration = duration
         self._desc = desc
-        self._likes = 0
-        self._views = 0
+        self._likes = likes
+        self._views = views
         self._uid = uid
 
     def disp(self):
