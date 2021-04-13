@@ -49,7 +49,7 @@ class DBase:
     def retrieveParticularVideo(self, iURI):
         try:
             csor = self.__conn.cursor()
-            csor.execute(f'SELECT * FROM videos WHERE uri = {iURI}')
+            csor.execute(f'SELECT * FROM videos WHERE uri = "{iURI}"')
             return csor.fetchall()[0]
         except Error as e:
             print("dbase::retrieveParticularVideo", e)
@@ -109,7 +109,7 @@ class DBase:
             csor.close()
             return record[0]
         except Error as e:
-            print("dbase::retriveUser", e)
+            print("dbase::retrieveUser", e)
 
     def changeUserDetails(self, iEmail, **kwargs):
         # email change is not allowed
@@ -213,7 +213,7 @@ class DBase:
         except Error as e:
             print("dbase::removeFromPlaylist", e)
 
-    def retrivePlaylist(self, iEmail, iPlaylistName):
+    def retrievePlaylist(self, iEmail, iPlaylistName):
         try:
             csor = self.__conn.cursor()
             csor.execute(f'SELECT * FROM [{iEmail + iPlaylistName}]')
@@ -221,7 +221,7 @@ class DBase:
         except:
             print("dbase::retrievePlaylist", e)
 
-    def retriveListOfPlaylists(self, iEmail):
+    def retrieveListOfPlaylists(self, iEmail):
         try:
             csor = self.__conn.cursor()
             csor.execute('.tables')
@@ -230,8 +230,8 @@ class DBase:
                 if (re.match('^' + iEmail, table)):
                     returnList.append(table)
             return returnList
-        except Error as e:likes INTEGER
-            print("dbase::retriveListOfPlaylists", e)
+        except Error as e:
+            print("dbase::retrieveListOfPlaylists", e)
 
  # def __del__(self):
     #     os.system('rm ../assets/database.db')
