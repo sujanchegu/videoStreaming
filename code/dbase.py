@@ -2,14 +2,13 @@ import os
 import re
 import sqlite3
 from sqlite3 import Error
-from scipy import spatial
 
 class DBase:
     def __init__(self):
         self.__conn = None
         try:
-            # os.system('rm ../assets/database.db')
-            # os.system('touch ../assets/database.db')
+            os.system('rm ../assets/database.db')
+            os.system('touch ../assets/database.db')
 
             self.__conn = sqlite3.connect('../assets/database.db', check_same_thread=False)
 
@@ -69,8 +68,9 @@ class DBase:
             csor.execute(f'SELECT uri,dur, likes, views FROM videos WHERE uri != "{iURI}"')
             vectors = csor.fetchall()
             store = {}
+            print("Vectors in FindSimilar : ", vectors)
             for vector in vectors:
-                store[vector[0]] = [vector[1], vector[2], vector[3]]
+                store[vector[0]] = [float(vector[1]), float(vector[2]), float(vector[3])]
             min  = 1.0
             ret_uri = ''
             for vid in store:
@@ -81,7 +81,7 @@ class DBase:
 
             csor2 = self.__conn.cursor()
             csor2.execute(f'SELECT * FROM videos WHERE uri = "{ret_uri}"')
-            return csor2.fetchall()
+            return csor2.fetchall()[0]
 
         except Error as e:
             print("dbase::incAttr", e)
@@ -160,9 +160,31 @@ class DBase:
 
 
 
-    def addHistory(self, iHistoryObject):
+    # def addHistory(self, iHistoryObject):
+    #     try:
+    #         iEmail = iHistoryObject._personUID
+    #         csor = self.__conn.cursor()
+    #         csor.execute(f'SELECT MAX(session) FROM [{iEmail}]')
+    #         iSessionNo = csor.fetchall()[0][0]
+    #         if (iSessionNo == None):
+    #             iSessionNo = 1
+    #         else:
+    #             iSessionNo = iSessionNo + 1
+    #         for iVideoObject,iCount in iHistoryObject._historyLIST.items():
+    #             iURI = iVideoObject._videoURI
+    #             csor.execute(f'SELECT EXISTS (SELECT 1 FROM [{iEmail}] WHERE uri ="{iURI}")')
+    #             if(csor.fetchall()[0][0] == 0):
+    #                 self.__conn.execute(f'INSERT INTO [{iEmail}] values (?, ?, ?)', (iURI, iCount, iSessionNo))
+    #             else:
+    #                 self.__conn.execute(f'UPDATE [{iEmail}] SET count = count + {iCount} WHERE uri = "{iURI}"')
+    #                 self.__conn.execute(f'UPDATE [{iEmail}] SET session = {iSessionNo} WHERE uri = "{iURI}"')
+    #         csor.close()
+    #         self.__conn.commit()
+    #     except Error as e:
+    #         print("dbase::addHistory", e)
+
+    def addVideoToHistory(self, iVideoObject, iEmail):
         try:
-            iEmail = iHistoryObject._personUID
             csor = self.__conn.cursor()
             csor.execute(f'SELECT MAX(session) FROM [{iEmail}]')
             iSessionNo = csor.fetchall()[0][0]
@@ -170,18 +192,17 @@ class DBase:
                 iSessionNo = 1
             else:
                 iSessionNo = iSessionNo + 1
-            for iVideoObject,iCount in iHistoryObject._historyLIST.items():
-                iURI = iVideoObject._videoURI
-                csor.execute(f'SELECT EXISTS (SELECT 1 FROM [{iEmail}] WHERE uri ="{iURI}")')
-                if(csor.fetchall()[0][0] == 0):
+            iURI = iVideoObject._videoURI
+            iCount = 1
+            csor.execute(f'SELECT EXISTS (SELECT 1 FROM [{iEmail}] WHERE uri ="{iURI}")')
+            if(csor.fetchall()[0][0] == 0):
                     self.__conn.execute(f'INSERT INTO [{iEmail}] values (?, ?, ?)', (iURI, iCount, iSessionNo))
-                else:
+            else:
                     self.__conn.execute(f'UPDATE [{iEmail}] SET count = count + {iCount} WHERE uri = "{iURI}"')
                     self.__conn.execute(f'UPDATE [{iEmail}] SET session = {iSessionNo} WHERE uri = "{iURI}"')
-            csor.close()
-            self.__conn.commit()
         except Error as e:
-            print("dbase::addHistory", e)
+            print("dbase::addVideoToHistory", e)
+
 
     def retrieveHistory(self, iEmail):
         try:
