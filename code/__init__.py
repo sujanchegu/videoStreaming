@@ -69,3 +69,5 @@ db.print_table('[abc@gmail.com]')
 print("\n")
 db.print_table('[abc@gmail.commy-playlist]')
 print("\n")
+
+print("\n\nabc's hist : ",db.retrieveHistory("abc@gmail.com"), "\n\n")

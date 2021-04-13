@@ -2,13 +2,14 @@ import os
 import re
 import sqlite3
 from sqlite3 import Error
+from scipy import spatial
 
 class DBase:
     def __init__(self):
         self.__conn = None
         try:
-            os.system('rm ../assets/database.db')
-            os.system('touch ../assets/database.db')
+            # os.system('rm ../assets/database.db')
+            # os.system('touch ../assets/database.db')
 
             self.__conn = sqlite3.connect('../assets/database.db', check_same_thread=False)
 
@@ -50,7 +51,9 @@ class DBase:
         try:
             csor = self.__conn.cursor()
             csor.execute(f'SELECT * FROM videos WHERE uri = "{iURI}"')
-            return csor.fetchall()[0]
+            res = csor.fetchall()
+            print("\n\ncsor.fetchall in retrieveParticularVideo : ", iURI, res[0],"\n\n")
+            return res[0]
         except Error as e:
             print("dbase::retrieveParticularVideo", e)
 
@@ -68,7 +71,7 @@ class DBase:
             csor.execute(f'SELECT uri,dur, likes, views FROM videos WHERE uri != "{iURI}"')
             vectors = csor.fetchall()
             store = {}
-            print("Vectors in FindSimilar : ", vectors)
+            print("\n\nVectors in FindSimilar : ", vectors,"\n\n")
             for vector in vectors:
                 store[vector[0]] = [float(vector[1]), float(vector[2]), float(vector[3])]
             min  = 1.0

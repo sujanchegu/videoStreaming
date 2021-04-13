@@ -1,4 +1,3 @@
-from history import *
 from dbase import *
 
 class Video:

@@ -107,6 +107,7 @@ class Creator(Consumer):
         Consumer.__init__(self, consumer)
 
     def Create_video(self, name,uri,duration,desc):
+        db.addVideo(name,uri, desc, self._email, duration, 0, 0)
         return Video(name,uri,duration,desc, self._userid)
 
     def disp(self):

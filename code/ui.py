@@ -27,24 +27,27 @@ class ConsumerUI:
         # print("email : ",email)
         user_record = db.retrieveUser(email);
         print("User record : ", user_record);
-        self.logged_in[email] = Consumer(user_record[0], user_record[1], user_record[2], user_record[3], user_record[4])
+        self.logged_in[email] = Consumer(user_record[0], user_record[1], user_record[1],user_record[2], user_record[3])
 
         consumer1 = Consumer()
         consumer1.register('sriram', 'sriram@gmail.com', 'allahwhoakbar')
         consumer1.disp()
         creator1 = Creator('123', consumer1)
         creator1.disp()
-        video1 = creator1.Create_video('mandalorian', '1', '58.00', 'awesome show' )
-        video2 = creator1.Create_video('GOT', '2', '58.00', 'S8 Sucks' )
+        # video1 = creator1.Create_video('mandalorian', '1', '58.00', 'awesome show' )
+        # video2 = creator1.Create_video('GOT', '2', '58.00', 'S8 Sucks' )
+        #
+        # self.logged_in[email].Create_Playlist('favourites')
+        # self.logged_in[email].Add_To_Playlist('favourites', video1)
+        # self.logged_in[email].Add_To_Playlist('favourites', video2)
 
-        self.logged_in[email].Create_Playlist('favourites')
-        self.logged_in[email].Add_To_Playlist('favourites', video1)
-        self.logged_in[email].Add_To_Playlist('favourites', video2)
-
-        self.logged_in[email].Play_All_Playlist('favourites')
+        # self.logged_in[email].Play_All_Playlist('favourites')
 
         self.fetch_updates(self.logged_in[email])
-        print("Render Buffer : ",self.render_buffer)
+        # print("Render Buffer : ",self.render_buffer)
+        print("Loop in login : ")
+        for c in self.render_buffer:
+            c.disp()
 
     def fetch_updates(self, user):
         self.render_buffer = self.recommender.update(user)

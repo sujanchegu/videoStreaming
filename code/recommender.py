@@ -5,6 +5,7 @@ class Recommender:
         self.vid_buffer = set()
 
     def Poll_History(self, user):
+        print("\n\nPoll_History : ",user._history._personUID,"\n\n")
         recent_history = user._history.Fetch_Ten()
         return recent_history
 

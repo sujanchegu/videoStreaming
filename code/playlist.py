@@ -24,10 +24,10 @@ class Playlist:
         # for vid in self._playlist:
         #     vid.Play(history)
         playlist = db.retrievePlaylist(self._email,self._name)
-        #print(f"playlist : {playlist}")
+        print(f"playlist : {playlist}")
         for i in playlist:
             vid_info = db.retrieveParticularVideo(i[0])
-            #print(vid_info)
+            print("\n\nvid_info in Play_All : ",vid_info, "\n\n")
             #('sriram eating', 'video1', 'bennur too', 123, 501, 'abc@gmail.com', 23.45)
             vid_obj = Video(vid_info[0],vid_info[1],vid_info[-1],vid_info[2],vid_info[-2],vid_info[3],vid_info[4])
             vid_obj.Play(history)
