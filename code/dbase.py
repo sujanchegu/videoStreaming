@@ -279,6 +279,20 @@ class DBase:
         except Error as e:
             print("dbase::retrieveListOfPlaylists", e)
 
+ 
+    def retrieveTopVideos(self):
+        try:
+            csor = self.__conn.cursor()
+            csor.execute(f'SELECT * FROM videos ORDER BY uploadDate DESC')
+            recentlyUploaded = csor.fetchmany(10)
+            csor.execute(f'SELECT * FROM videos ORDER BY likes DESC')
+            mostLiked = csor.fetchmany(10)
+            csor.execute(f'SELECT * FROM videos ORDER BY views DESC')
+            mostViewed = csor.fetchmany(10)
+            return (recentlyUploaded, mostLiked, mostViewed)
+        except Error as e:
+            print("dbase::retrieveTopVideos", e)
+
  # def __del__(self):
     #     os.system('rm ../assets/database.db')
 
