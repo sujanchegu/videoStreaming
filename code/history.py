@@ -38,11 +38,11 @@ class History:
         for vid in recentViewed:
             print("\n\nFetch_Ten : ",vid[0],"\n\n")
             vid_info =  db.retrieveParticularVideo(vid[0])
-            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-1],vid_info[2],vid_info[-2],vid_info[3],vid_info[4])
+            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4])
             recentViewed_obj.append(vid_obj)
         for vid in mostViewed:
             vid_info =  db.retrieveParticularVideo(vid[0])
-            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-1],vid_info[2],vid_info[-2],vid_info[3],vid_info[4])
+            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4])
             mostViewed_obj.append(vid_obj)
 
         # print("printing recent Viewed")

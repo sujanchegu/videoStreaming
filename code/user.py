@@ -107,8 +107,10 @@ class Creator(Consumer):
         Consumer.__init__(self, consumer)
 
     def Create_video(self, name,uri,duration,desc):
-        db.addVideo(name,uri, desc, self._email, duration, 0, 0)
-        return Video(name,uri,duration,desc, self._userid)
+        date = datetime.today()
+        date_str = str(date.year) + '-' + str(date.month) + '-' + str(date.day)
+        db.addVideo(name, uri, desc, self._email, duration, date_str, 0, 0)
+        return Video(name, uri, duration, desc, self._userid)
 
     def disp(self):
         print(f"{self.__creditcardInfo}", end = ' ')

@@ -29,7 +29,7 @@ class Playlist:
             vid_info = db.retrieveParticularVideo(i[0])
             print("\n\nvid_info in Play_All : ",vid_info, "\n\n")
             #('sriram eating', 'video1', 'bennur too', 123, 501, 'abc@gmail.com', 23.45)
-            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-1],vid_info[2],vid_info[-2],vid_info[3],vid_info[4])
+            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4])
             vid_obj.Play(history)
 
     def disp(self):
@@ -37,5 +37,5 @@ class Playlist:
         #print(f"playlist : {playlist}")
         for i in playlist:
             vid_info = db.retrieveParticularVideo(i[0])
-            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-1],vid_info[2],vid_info[-2],vid_info[3],vid_info[4])
+            vid_obj = Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4])
             vid_obj.disp()
