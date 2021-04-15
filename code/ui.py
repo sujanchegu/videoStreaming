@@ -15,6 +15,7 @@ class ConsumerUI:
     def __init__(self):
         self.logged_in = defaultdict(lambda:'garbage')
         self.recommender = Recommender()
+        self.recommend_buffer = []
 
     def register(self, name, email, pwd):
         dude = Consumer() # object of consumer, useris and registerDate will be automatically filled
@@ -126,9 +127,12 @@ def dashboard():
     global email_;
     return render_template('dashboard.html', name1 = name_, email1 = email_, rec = json.dumps(list(cons.recommend_buffer)), mv = json.dumps(list(cons.mostViewed_buffer)), ml = json.dumps(list(cons.mostLiked_buffer)), ru = json.dumps(list(cons.recentlyUpload_buffer)))
 
-# @app.route("/dashboard_register")
-# def dashboard_register():
-#     return render_template('dashboard_register.html')
+@app.route("/dashboard/manage_prof")
+def dashboard_mp():
+    return '''
+    <h1> Manage Profile </h1>
+    <a href="/dashboard">Go back</a>
+    '''
 
 @app.route("/logout")
 def logout():
