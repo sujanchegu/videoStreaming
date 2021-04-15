@@ -7,6 +7,7 @@
   <a href="https://icons8.com/icon/47722/pause-button"></a>
   <a href="https://icons8.com/icon/82788/facebook-like"></a>
   <a href="https://icons8.com/icon/83166/facebook-like"></a>
+  <a href="https://icons8.com/icon/3220/plus"></a>
   <title>Video Streamer</title>
 </head>
 <style>
@@ -46,6 +47,15 @@
     left: 3%;
     cursor: pointer;
   }
+
+  .plus_btn
+  {
+      position: absolute;
+      bottom : 3%;
+      left : 41%;
+      cursor: pointer;
+  }
+
 </style>
 
 <body style="font-family: Arial; position : absolute; height : 100%; width : 100%; overflow : scroll;">
@@ -123,6 +133,11 @@
         var dur_lbl = document.createElement("label");
         var title_lbl = document.createElement("label");
         var like_btn = document.createElement("img");
+        var plus_icon = document.createElement("img");
+        plus_icon.src = "https://img.icons8.com/android/24/000000/plus.png"
+        plus_icon.name = item[1];
+        plus_icon.setAttribute('class', 'plus_btn');
+        box.appendChild(plus_icon)
         like_btn.setAttribute('class', 'like');
         like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
         box.appendChild(like_btn)
@@ -154,6 +169,11 @@
       var dur_lbl = document.createElement("label");
       var title_lbl = document.createElement("label");
       var like_btn = document.createElement("img");
+      var plus_icon = document.createElement("img");
+      plus_icon.src = "https://img.icons8.com/android/24/000000/plus.png"
+      plus_icon.setAttribute('class', 'plus_btn');
+      plus_icon.name = item[1];
+      box.appendChild(plus_icon)
       like_btn.setAttribute('class', 'like');
       like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
       box.appendChild(like_btn)
@@ -184,6 +204,11 @@
       var dur_lbl = document.createElement("label");
       var title_lbl = document.createElement("label");
       var like_btn = document.createElement("img");
+      var plus_icon = document.createElement("img");
+      plus_icon.src = "https://img.icons8.com/android/24/000000/plus.png"
+      plus_icon.setAttribute('class', 'plus_btn');
+      plus_icon.name = item[1];
+      box.appendChild(plus_icon)
       like_btn.setAttribute('class', 'like');
       like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
       box.appendChild(like_btn)
@@ -214,6 +239,11 @@
       var dur_lbl = document.createElement("label");
       var title_lbl = document.createElement("label");
       var like_btn = document.createElement("img");
+      var plus_icon = document.createElement("img");
+      plus_icon.src = "https://img.icons8.com/android/24/000000/plus.png"
+      plus_icon.setAttribute('class', 'plus_btn');
+      plus_icon.name = item[1];
+      box.appendChild(plus_icon)
       like_btn.setAttribute('class', 'like');
       like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
       box.appendChild(like_btn)
@@ -295,6 +325,21 @@
       }
     }
   </script>
+
+  <script>
+    var plus_list = document.querySelectorAll('.plus_btn');
+    plus_list.forEach(added_to_playlist);
+    var index = 0;
+    function added_to_playlist(item, index)
+    {
+      item.onclick = function()
+      {
+        alert(item.name + " added to favourites!");
+        localStorage.setItem(item.name + '_playl', 1)
+      }
+    }
+  </script>
+
   <script>
     //script: logout send stats
     function sendStats() {
@@ -304,7 +349,7 @@
       data = ""
       for (var i = 0; i < localStorage.length; i++){
         keypair = localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i));
-        alert(keypair)
+        //alert(keypair)
         data += keypair + "&";
       }
       xhttp.send(data);

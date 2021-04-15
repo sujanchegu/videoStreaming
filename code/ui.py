@@ -143,10 +143,20 @@ def logout():
 
 @app.route("/updateStats", methods = ['POST'])
 def updateStats():
+    global email_;
     for key in request.form:
         uri = key[0:-6]
         attr = key[-5:]
-        db.incAttr(uri, attr, int(request.form[key]))
+        print("\n\nupdateStats > uri : ", uri,"\n\nupdateStats > attr : ", attr);
+        vid_info = db.retrieveParticularVideo(uri)
+        if(attr == "playl"):
+            # db.addToPlaylist("favourites", Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
+            print("\n\nAdding to playlist...\n\n")
+        else:
+            db.incAttr(uri, attr, int(request.form[key]))
+            if(attr == "views"):
+                db.addVideoToHistory(Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]), email_)
+                print(db.retrieveHistory(email_))
     return ""
 
 if __name__ == '__main__':
