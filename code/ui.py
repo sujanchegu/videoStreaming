@@ -53,11 +53,14 @@ class ConsumerUI:
         # self.logged_in[email].Play_All_Playlist('favourites')
 
         self.fetch_updates(self.logged_in[email], False)
-        print("Recommend Buffer : ",self.recommend_buffer)
-        print("Mostly Viewed Buffer : ",self.mostViewed_buffer)
-        print("Mostly Like Buffer : ",self.mostLiked_buffer)
-        print("Recently Uploaded Buffer : ",self.recentlyUpload_buffer)
-
+        print("Recommend Buffer : \n",self.recommend_buffer)
+        print("Mostly Viewed Buffer : \n",self.mostViewed_buffer)
+        print("Mostly Like Buffer : \n",self.mostLiked_buffer)
+        print("Recently Uploaded Buffer : \n",self.recentlyUpload_buffer)
+        print("Recent History : \n", self.recent_history)
+        print("Favourites : \n", self.favourites)
+        print("Liked : \n", self.liked)
+        
         # print("Loop in login : ")
         # for c in self.recommend_buffer:
         #     c.disp()
@@ -67,6 +70,11 @@ class ConsumerUI:
             self.recommend_buffer = self.recommender.update(user)
         topVideos = obj.getTopVideos()
         self.mostViewed_buffer, self.mostLiked_buffer, self.recentlyUpload_buffer = topVideos[0], topVideos[1], topVideos[2]
+
+        self.recent_history = db.retrieveHistory(user._email)[0]
+        self.favourites = db.retrievePlaylist(user._email, 'favourites')
+        self.liked = db.retrievePlaylist(user._email, 'liked')
+
 
 cons = ConsumerUI()
 
@@ -143,6 +151,9 @@ def logout():
 
 @app.route("/updateStats", methods = ['POST'])
 def updateStats():
+
+    print("Here in update stats")
+
     global email_;
     for key in request.form:
         uri = key[0:-6]
@@ -150,13 +161,15 @@ def updateStats():
         print("\n\nupdateStats > uri : ", uri,"\n\nupdateStats > attr : ", attr);
         vid_info = db.retrieveParticularVideo(uri)
         if(attr == "playl"):
-            # db.addToPlaylist("favourites", Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
             print("\n\nAdding to playlist...\n\n")
+            db.addToPlaylist(Playlist("favourites", email_), Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
         else:
             db.incAttr(uri, attr, int(request.form[key]))
             if(attr == "views"):
                 db.addVideoToHistory(Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]), email_)
                 print(db.retrieveHistory(email_))
+            else:
+                db.addToPlaylist(Playlist("liked", email_), Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
     return ""
 
 if __name__ == '__main__':

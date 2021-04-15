@@ -8,7 +8,10 @@ class Playlist:
         # self._playlist = set()
         self._name = name;
         self._email = email;
-        db.createPlaylist(email, name);
+        # db.createPlaylist(email, name);
+        x = db.retrievePlaylist(email, name)
+        if(x == None):
+            db.createPlaylist(email, name)
 
     def Add_To(self,vid_obj):
         # self._playlist.add(vid_obj)

@@ -264,7 +264,7 @@ class DBase:
             csor.execute(f'SELECT * FROM [{iEmail + iPlaylistName}]')
             return csor.fetchall()
         except:
-            print("dbase::retrievePlaylist", e)
+            return None
 
     def retrieveListOfPlaylists(self, iEmail):
         try:
@@ -278,7 +278,7 @@ class DBase:
         except Error as e:
             print("dbase::retrieveListOfPlaylists", e)
 
- 
+
     def retrieveTopVideos(self):
         try:
             csor = self.__conn.cursor()
