@@ -225,6 +225,12 @@ class DBase:
         except Error as e:
             print("dbase::removeHistory", e)
 
+    def removeFromHistory(self, iEmail, iURI):
+        try:
+            self.__conn.execute(f'DELETE FROM [{iEmail}] where uri = "{iURI}"')
+            self.__conn.commit()
+        except Error as e:
+            print("dbase::removeFromPlaylist", e)
 
 
 
@@ -248,11 +254,8 @@ class DBase:
         except Error as e:
             print("dbase::addToPlaylist", e)
 
-    def removeFromPlaylist(self, iPlaylist, iVideoObject):
+    def removeFromPlaylist(self, iEmail, iPlaylistName, iURI):
         try:
-            iPlaylistName = iPlaylist._name
-            iEmail = iPlaylist._email
-            iURI = iVideoObject._videoURI
             self.__conn.execute(f'DELETE FROM [{iEmail + iPlaylistName}] where uri = "{iURI}"')
             self.__conn.commit()
         except Error as e:

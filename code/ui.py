@@ -75,14 +75,17 @@ class ConsumerUI:
         topVideos = obj.getTopVideos()
         self.mostViewed_buffer, self.mostLiked_buffer, self.recentlyUpload_buffer = topVideos[0], topVideos[1], topVideos[2]
 
+        self.recent_history = []
         temp = db.retrieveHistory(user._email)[0]
         for vid in temp:
             self.recent_history.append(db.retrieveParticularVideo(vid[0]))
 
+        self.favourites = []
         temp = db.retrievePlaylist(user._email, 'favourites')
         for vid in temp:
             self.favourites.append(db.retrieveParticularVideo(vid[0]))
 
+        self.liked = []
         temp = db.retrievePlaylist(user._email, 'liked')
         for vid in temp:
             self.liked.append(db.retrieveParticularVideo(vid[0]))
@@ -144,12 +147,15 @@ def verify_user1():
 
 @app.route("/dashboard")
 def dashboard():
+    global email_
+    cons.fetch_updates(cons.logged_in[email_], True)
     global name_;
-    global email_;
     return render_template('dashboard.html', name1 = name_, email1 = email_, rec = json.dumps(list(cons.recommend_buffer)), mv = json.dumps(list(cons.mostViewed_buffer)), ml = json.dumps(list(cons.mostLiked_buffer)), ru = json.dumps(list(cons.recentlyUpload_buffer)))
 
 @app.route("/dashboard/manage_prof")
 def dashboard_mp():
+    global email_
+    cons.fetch_updates(cons.logged_in[email_], True)
     return render_template('profile.html', hist = json.dumps(list(cons.recent_history)), fav = json.dumps(list(cons.favourites)), like = json.dumps(list(cons.liked)))
 
 @app.route("/logout")
@@ -168,18 +174,33 @@ def updateStats():
         uri = key[0:-6]
         attr = key[-5:]
         print("\n\nupdateStats > uri : ", uri,"\n\nupdateStats > attr : ", attr);
-        vid_info = db.retrieveParticularVideo(uri)
         if(attr == "playl"):
             print("\n\nAdding to playlist...\n\n")
+            vid_info = db.retrieveParticularVideo(uri)
             db.addToPlaylist(Playlist("favourites", email_), Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
+        elif(attr == "delet"):
+            if(request.form[key] == "fav"):
+                db.removeFromPlaylist(email_, 'favourites', uri)
+            elif(request.form[key] == "like"):
+                db.removeFromPlaylist(email_, 'liked', uri)
+            else:
+                db.removeFromHistory(email_, uri)
+        elif(attr == "erase"):
+            print("HELLO I AM HERE")
+            db.removeHistory(email_)
         else:
             db.incAttr(uri, attr, int(request.form[key]))
+            vid_info = db.retrieveParticularVideo(uri)
             if(attr == "views"):
                 db.addVideoToHistory(Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]), email_)
                 print(db.retrieveHistory(email_))
             else:
                 db.addToPlaylist(Playlist("liked", email_), Video(vid_info[0],vid_info[1],vid_info[-2],vid_info[2],vid_info[-3],vid_info[3],vid_info[4]))
+
+    # cons.fetch_updates(cons.logged_in[email_], True)
     return ""
+
+
 
 if __name__ == '__main__':
   app.run(host='127.0.0.1', port = 5000, debug = True)

@@ -33,7 +33,7 @@
   </style>
   <body style = "position : absolute; height : 100%; width : 100%; overflow : scroll;">
     <h1 style = "position : absolute; top : 3%; left : 3%;">Manage Profile</h1>
-    <a href = "/dashboard" style = "position : absolute; top : 3%; right : 3%;">Go Back</a>
+    <a onclick = "sendStats()" href = "/dashboard" style = "position : absolute; top : 3%; right : 3%;">Go Back</a>
     <h2 style = "position : absolute; top : 10%; left : 3%;"> Edit Profile </h2>
     <label style = "position : absolute; top : 20%; left : 3%;" for="name">Name : &nbsp;&nbsp;</label>
     <input style = "position : absolute; top : 20%; left : 7%;" type="name" id="name" ><br><br>
@@ -158,6 +158,23 @@
           localStorage.setItem(item.title + '_delet', item.name.split('_')[0]);
           document.getElementById(item.name.split('_')[0] + '_div').removeChild(document.getElementById(item.name));
         }
+      }
+    </script>
+
+    <script>
+      //script: logout send stats
+      function sendStats() {
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/updateStats", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        data = ""
+        for (var i = 0; i < localStorage.length; i++){
+          keypair = localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i));
+          //alert(keypair)
+          data += keypair + "&";
+        }
+        xhttp.send(data);
+        localStorage.clear();
       }
     </script>
   </body>
