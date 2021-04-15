@@ -17,6 +17,10 @@ class ConsumerUI:
         self.recommender = Recommender()
         self.recommend_buffer = []
 
+        self.recent_history = []
+        self.favourites = []
+        self.liked = []
+
     def register(self, name, email, pwd):
         dude = Consumer() # object of consumer, useris and registerDate will be automatically filled
         dude.register(name, email, pwd) # useris and registerDate will be automatically filled
@@ -60,7 +64,7 @@ class ConsumerUI:
         print("Recent History : \n", self.recent_history)
         print("Favourites : \n", self.favourites)
         print("Liked : \n", self.liked)
-        
+
         # print("Loop in login : ")
         # for c in self.recommend_buffer:
         #     c.disp()
@@ -71,9 +75,17 @@ class ConsumerUI:
         topVideos = obj.getTopVideos()
         self.mostViewed_buffer, self.mostLiked_buffer, self.recentlyUpload_buffer = topVideos[0], topVideos[1], topVideos[2]
 
-        self.recent_history = db.retrieveHistory(user._email)[0]
-        self.favourites = db.retrievePlaylist(user._email, 'favourites')
-        self.liked = db.retrievePlaylist(user._email, 'liked')
+        temp = db.retrieveHistory(user._email)[0]
+        for vid in temp:
+            self.recent_history.append(db.retrieveParticularVideo(vid[0]))
+
+        temp = db.retrievePlaylist(user._email, 'favourites')
+        for vid in temp:
+            self.favourites.append(db.retrieveParticularVideo(vid[0]))
+
+        temp = db.retrievePlaylist(user._email, 'liked')
+        for vid in temp:
+            self.liked.append(db.retrieveParticularVideo(vid[0]))
 
 
 cons = ConsumerUI()
@@ -138,10 +150,7 @@ def dashboard():
 
 @app.route("/dashboard/manage_prof")
 def dashboard_mp():
-    return '''
-    <h1> Manage Profile </h1>
-    <a href="/dashboard">Go back</a>
-    '''
+    return render_template('profile.html', hist = json.dumps(list(cons.recent_history)), fav = json.dumps(list(cons.favourites)), like = json.dumps(list(cons.liked)))
 
 @app.route("/logout")
 def logout():

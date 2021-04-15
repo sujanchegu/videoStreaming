@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> Manage Profile </title>
+    <a href="https://icons8.com/icon/47796/minus"></a>
+  </head>
+  <style>
+    .div_box
+    {
+      position: absolute;
+      border: 1px solid black;
+      top: 30%;
+      bottom: 2%;
+      width: 10%;
+      background: #1E90FF;
+    }
+    .title_label
+    {
+      position: absolute;
+      top: 3%;
+      left: 3%;
+      color: #141411;
+      font-size: 14px;
+    }
+    .minus_btn
+    {
+        position: absolute;
+        bottom : 27%;
+        left : 27%;
+        cursor: pointer;
+    }
+  </style>
+  <body style = "position : absolute; height : 100%; width : 100%; overflow : scroll;">
+    <h1 style = "position : absolute; top : 3%; left : 3%;">Manage Profile</h1>
+    <a href = "/dashboard" style = "position : absolute; top : 3%; right : 3%;">Go Back</a>
+    <h2 style = "position : absolute; top : 10%; left : 3%;"> Edit Profile </h2>
+    <label style = "position : absolute; top : 20%; left : 3%;" for="name">Name : &nbsp;&nbsp;</label>
+    <input style = "position : absolute; top : 20%; left : 7%;" type="name" id="name" ><br><br>
+    <label style = "position : absolute; top : 25%; left : 3%;" for="pwd">Password : &nbsp;&nbsp;</label>
+    <input style = "position : absolute; top : 25%; left : 8%;" type="password" id="pwd" ><br><br>
+    <label style = "position : absolute; top : 30%; left : 3%;" for="c_pwd">Confirm Password : &nbsp;&nbsp;</label>
+    <input style = "position : absolute; top : 30%; left : 12%;" type="password" id="c_pwd" ><br><br>
+    <input type = "button" value = "Save Changes" style = "position : absolute; top : 35%; left : 3%;" />
+    <input id = "erase_btn" type = "button" value = "Erase History" style = "position : absolute; top : 40%; left : 3%;" />
+
+    <div id = 'hist_div' style = "position : absolute; top : 45%; left : 3%; height : 30%; width : 100%;">
+        <h2 style = "position : absolute; top : 1%; color : red;"> History </h2>
+    </div>
+    <div id = 'fav_div' style = "position : absolute; top : 80%; left : 3%; height : 30%; width : 100%;">
+        <h2 style = "position : absolute; top : 1%; color : red;"> Favourites </h2>
+    </div>
+    <div id = 'like_div' style = "position : absolute; top : 115%; left : 3%; height : 30%; width : 100%;">
+        <h2 style = "position : absolute; top : 1%; color : red;"> Liked Videos </h2>
+    </div>
+    <div style = "position : absolute; top : 150%; left : 3%; height : 30%; width : 100%;">
+    </div>
+    <script>
+        var hist1 = {{ hist | tojson }};
+        var fav1 = {{ fav | tojson }};
+        var like1 = {{ like | tojson }};
+
+        hist1 = JSON.parse(hist1);
+        fav1 = JSON.parse(fav1);
+        like1 = JSON.parse(like1);
+
+        console.log("\n\nhist1 : ",hist1,"\n\nfav1 : ",fav1,"\n\nlike1 : ",like1,"\n\n")
+        var index = 0;
+        var left = 0;
+        hist1.forEach(history);
+        function history(item, index)
+        {
+          var box = document.createElement("div");
+          box.setAttribute('class', 'div_box');
+          box.style.left = String(left) + "%";
+          box.setAttribute('id','hist_' + String(index))
+          left += 11;
+          document.getElementById('hist_div').appendChild(box);
+          var title_lbl = document.createElement("label");
+          title_lbl.textContent = item[0];
+          title_lbl.setAttribute('class', 'title_label');
+          box.appendChild(title_lbl);
+
+          var minus_icon = document.createElement("img");
+          minus_icon.setAttribute('class', 'minus_btn');
+          minus_icon.src = "https://img.icons8.com/wired/64/000000/minus.png";
+          minus_icon.setAttribute('name', 'hist_' + String(index));
+          minus_icon.title = item[1]
+          box.appendChild(minus_icon);
+        }
+
+        var index1 = 0;
+        var left1 = 0;
+        fav1.forEach(favourites);
+        function favourites(item, index1)
+        {
+          var box = document.createElement("div");
+          box.setAttribute('class', 'div_box');
+          box.style.left = String(left1) + "%";
+          box.setAttribute('id','fav_' + String(index1))
+          left1 += 11;
+          document.getElementById('fav_div').appendChild(box);
+          var title_lbl = document.createElement("label");
+          title_lbl.textContent = item[0];
+          title_lbl.setAttribute('class', 'title_label');
+          box.appendChild(title_lbl);
+
+          var minus_icon = document.createElement("img");
+          minus_icon.setAttribute('class', 'minus_btn');
+          minus_icon.src = "https://img.icons8.com/wired/64/000000/minus.png";
+          minus_icon.setAttribute('name', 'fav_' + String(index1));
+          minus_icon.title = item[1]
+          box.appendChild(minus_icon);
+        }
+
+        var index2 = 0;
+        var left2 = 0;
+        like1.forEach(likes);
+        function likes(item, index2)
+        {
+          var box = document.createElement("div");
+          box.setAttribute('class', 'div_box');
+          box.style.left = String(left2) + "%";
+          box.setAttribute('id','like_' + String(index2))
+          left2 += 11;
+          document.getElementById('like_div').appendChild(box);
+          var title_lbl = document.createElement("label");
+          title_lbl.textContent = item[0];
+          title_lbl.setAttribute('class', 'title_label');
+          box.appendChild(title_lbl);
+
+          var minus_icon = document.createElement("img");
+          minus_icon.setAttribute('class', 'minus_btn');
+          minus_icon.src = "https://img.icons8.com/wired/64/000000/minus.png";
+          minus_icon.setAttribute('name', 'like_' + String(index2));
+          minus_icon.title = item[1]
+          box.appendChild(minus_icon);
+        }
+
+        document.getElementById('erase_btn').onclick = function()
+        {
+          localStorage.setItem('_erase',1);
+          document.body.removeChild(document.getElementById('hist_div'));
+          document.getElementById('fav_div').style.top = "45%";
+          document.getElementById('like_div').style.top = "80%";
+        }
+
+    </script>
+
+    <script>
+      var minus_list = document.querySelectorAll('.minus_btn');
+      minus_list.forEach(remove_from_div);
+      var index = 0;
+      function remove_from_div(item,index)
+      {
+        item.onclick = function()
+        {
+          localStorage.setItem(item.title + '_delet', item.name.split('_')[0]);
+          document.getElementById(item.name.split('_')[0] + '_div').removeChild(document.getElementById(item.name));
+        }
+      }
+    </script>
+  </body>
+</html>
