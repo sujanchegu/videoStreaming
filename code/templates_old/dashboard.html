@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <a href="https://icons8.com/icon/65575/play-button-circled"></a>
     <a href="https://icons8.com/icon/47722/pause-button"></a>
-    <a href="https://icons8.com/icon/82788/facebook-like"></a>
-    <a href="https://icons8.com/icon/83166/facebook-like"></a>
     <title>Video Streamer</title>
   </head>
   <style>
@@ -39,17 +37,10 @@
       left : 3%;
       color : #141411;
     }
-    .like
-    {
-        position: absolute;
-        bottom: 3%;
-        left : 3%;
-        cursor : pointer;
-    }
   </style>
   <body style = "font-family: Arial; position : absolute; height : 100%; width : 100%; overflow : scroll;">
     <h1 id = "heading" style = "position : absolute; left : 3%; top : 3%;"></h1>
-    <a style = "position : absolute; right : 4%; top : 2%; font-size : 18px;" href = "/dashboard/manage_prof"> Manage Profile </a>
+    <a style = "position : absolute; right : 4%; top : 2%; font-size : 18px;" href = "/manage_prof"> Manage Profile </a>
     <a style = "position : absolute; right : 4%; top : 6%; font-size : 18px;" href = "/logout"> Log Out </a>
     <div id = "rec_div" style = "height : 30%; position : absolute; top : 15%; left : 3%; width : 100%;">
       <!-- Recommend videos -->
@@ -120,12 +111,7 @@
               var play = document.createElement("img");
               var dur_lbl = document.createElement("label");
               var title_lbl = document.createElement("label");
-              var like_btn = document.createElement("img");
-              like_btn.setAttribute('class', 'like');
-              like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-              box.appendChild(like_btn)
               play.setAttribute('name',item[1])
-              like_btn.setAttribute('name',item[1])
               title_lbl.textContent = item[0];
               box.appendChild(title_lbl);
               title_lbl.setAttribute('class', 'title_label');
@@ -152,12 +138,7 @@
           var play = document.createElement("img");
           var dur_lbl = document.createElement("label");
           var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
           play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
           title_lbl.textContent = item[0];
           box.appendChild(title_lbl);
           title_lbl.setAttribute('class', 'title_label');
@@ -183,12 +164,7 @@
           var play = document.createElement("img");
           var dur_lbl = document.createElement("label");
           var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
           play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
           title_lbl.textContent = item[0];
           box.appendChild(title_lbl);
           title_lbl.setAttribute('class', 'title_label');
@@ -214,12 +190,7 @@
           var play = document.createElement("img");
           var dur_lbl = document.createElement("label");
           var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
           play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
           title_lbl.textContent = item[0];
           box.appendChild(title_lbl);
           title_lbl.setAttribute('class', 'title_label');
@@ -255,27 +226,6 @@
             vid_ele.style = "position : absolute; width : 95%; height : 75%; top : 20%;";
             vid_ele.appendChild(vid_src);
             document.getElementById('now_playing_div').appendChild(vid_ele)
-          }
-        }
-
-        var like_btn_list = document.querySelectorAll('.like')
-        var index5 = 0;
-        like_btn_list.forEach(liked);
-        function liked(item, index5)
-        {
-          var item_name = item.name
-          item.onclick = function()
-          {
-            // count part
-            console.log("liked > item_name : ",item_name)
-            if(item.src === "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png")
-            {
-              item.src = "https://img.icons8.com/material-rounded/24/000000/facebook-like--v1.png";
-            }
-            else
-            {
-              item.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png";
-            }
           }
         }
     </script>
