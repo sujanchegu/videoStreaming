@@ -52,7 +52,6 @@ class DBase:
             csor = self.__conn.cursor()
             csor.execute(f'SELECT * FROM videos WHERE uri = "{iURI}"')
             res = csor.fetchall()
-            print("\n\ncsor.fetchall in retrieveParticularVideo : ", iURI, res[0],"\n\n")
             return res[0]
         except Error as e:
             print("dbase::retrieveParticularVideo", e)

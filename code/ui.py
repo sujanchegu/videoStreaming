@@ -27,7 +27,8 @@ class ConsumerUI:
         #     c.disp()
 
     def logout(self,email):
-        del self.logged_in[email]
+        if(email in self.logged_in):
+            del self.logged_in[email]
         self.recommend_buffer.clear()
         print("In ConsumerUI > logout : ",self.logged_in)
 
@@ -139,6 +140,14 @@ def logout():
     global email_;
     cons.logout(email_)
     return render_template('home.html')
+
+@app.route("/updateStats", methods = ['POST'])
+def updateStats():
+    for key in request.form:
+        uri = key[0:-6]
+        attr = key[-5:]
+        db.incAttr(uri, attr, int(request.form[key]))
+    return ""
 
 if __name__ == '__main__':
   app.run(host='127.0.0.1', port = 5000, debug = True)

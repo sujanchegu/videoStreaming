@@ -1,310 +1,316 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <a href="https://icons8.com/icon/65575/play-button-circled"></a>
-    <a href="https://icons8.com/icon/47722/pause-button"></a>
-    <a href="https://icons8.com/icon/82788/facebook-like"></a>
-    <a href="https://icons8.com/icon/83166/facebook-like"></a>
-    <title>Video Streamer</title>
-  </head>
-  <style>
-    .div_box
-    {
-      position: absolute;
-      border : 1px solid black;
-      top : 30%;
-      bottom : 2%;
-      width : 10%;
-      background : #1E90FF;
+
+<head>
+  <meta charset="utf-8">
+  <a href="https://icons8.com/icon/65575/play-button-circled"></a>
+  <a href="https://icons8.com/icon/47722/pause-button"></a>
+  <a href="https://icons8.com/icon/82788/facebook-like"></a>
+  <a href="https://icons8.com/icon/83166/facebook-like"></a>
+  <title>Video Streamer</title>
+</head>
+<style>
+  .div_box {
+    position: absolute;
+    border: 1px solid black;
+    top: 30%;
+    bottom: 2%;
+    width: 10%;
+    background: #1E90FF;
+  }
+
+  .play_btn {
+    position: absolute;
+    top: 28%;
+    left: 28%;
+    cursor: pointer;
+  }
+
+  .dur_label {
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
+    color: #141411;
+  }
+
+  .title_label {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    color: #141411;
+  }
+
+  .like {
+    position: absolute;
+    bottom: 3%;
+    left: 3%;
+    cursor: pointer;
+  }
+</style>
+
+<body style="font-family: Arial; position : absolute; height : 100%; width : 100%; overflow : scroll;">
+  <h1 id="heading" style="position : absolute; left : 3%; top : 3%;"></h1>
+  <a style="position : absolute; right : 4%; top : 2%; font-size : 18px;" href="/dashboard/manage_prof"> Manage Profile
+  </a>
+  <a style="position : absolute; right : 4%; top : 6%; font-size : 18px;" onclick="sendStats()" href="/logout"> Log Out
+    <!-- <a style="position : absolute; right : 4%; top : 6%; font-size : 18px;" href="/logout"> Log Out -->
+  </a>
+  <div id="rec_div" style="height : 30%; position : absolute; top : 15%; left : 3%; width : 100%;">
+    <!-- Recommend videos -->
+    <h2 style="color : red; position : absolute; top : 0; left : 0;"> Recommended Videos</h2>
+  </div>
+  <div id="mv_div" style="height : 30%; position : absolute; top : 50%; left : 3%; width : 100%;">
+    <!-- Most Liked Videos -->
+    <h2 style="color : red; position : absolute; top : 0; left : 0;"> Most Viewed Videos</h2>
+  </div>
+  <div id="ml_div" style="height : 30%; position : absolute; top : 85%; left : 3%; width : 100%;">
+    <!-- Most Liked Videos -->
+    <h2 style="color : red; position : absolute; top : 0; left : 0;"> Most Liked Videos</h2>
+  </div>
+  <div id="ru_div" style="height : 30%; position : absolute; top : 120%; left : 3%; width : 100%;">
+    <!-- Most Liked Videos -->
+    <h2 style="color : red; position : absolute; top : 0; left : 0;"> Recently Uploaded Videos</h2>
+  </div>
+  <div id="now_playing_div"
+    style="color : red; position : absolute; left : 3%; top : 150%; width : 100%; height : 50%;">
+    <h2 style="color : red; position : absolute; top : 0; left : 0;"> Now Playing </h2>
+    <video id="vid_tag" controls autoplay style="position : absolute; width : 95%; height : 75%; top : 20%;">
+      <source id="vid_src" type="video/mp4">
+    </video>
+  </div>
+  <script>
+    // script : get user_name
+
+    var value = "{{ name1 }}";
+
+    var header = document.getElementById('heading');
+    value = value.charAt(0).toUpperCase() + value.slice(1)
+    var res = value.concat("'s Dashboard")
+    console.log("res > dashboard_login : ", res);
+    header.textContent = res;
+  </script>
+  <script>
+    // script : recommend_buffer
+    var rec1 = {{ rec | tojson }};
+    var mv1 = {{ mv | tojson }};
+    var ml1 = {{ ml | tojson }};
+    var ru1 = {{ ru | tojson }};
+
+    // console.log("All arrays : \n", rec1, "\n", mv1, "\n", ml1, "\n", ru1, "\n");
+
+    rec1 = JSON.parse(rec1);
+    mv1 = JSON.parse(mv1);
+    ml1 = JSON.parse(ml1);
+    ru1 = JSON.parse(ru1);
+
+    var len = rec1.length;
+    var left = 0;
+    var rec_div = document.getElementById('rec_div');
+    var index = 0;
+    if (rec1.length === 0) {
+      console.log("In len === 0 cond");
+      document.body.removeChild(rec_div);
+      document.getElementById('mv_div').style.top = "15%";
+      document.getElementById('ml_div').style.top = "50%";
+      document.getElementById('ru_div').style.top = "85%";
+      document.getElementById('now_playing_div').style.top = "120%";
     }
-    .play_btn
-    {
-      position: absolute;
-      top: 28%;
-      left : 28%;
-      cursor : pointer;
+    else {
+      rec1.forEach(myFunction);
+      function myFunction(item, index) {
+        var box = document.createElement("div");
+        var play = document.createElement("img");
+        var dur_lbl = document.createElement("label");
+        var title_lbl = document.createElement("label");
+        var like_btn = document.createElement("img");
+        like_btn.setAttribute('class', 'like');
+        like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
+        box.appendChild(like_btn)
+        play.setAttribute('name', item[1])
+        like_btn.setAttribute('name', item[1])
+        title_lbl.textContent = item[0];
+        box.appendChild(title_lbl);
+        title_lbl.setAttribute('class', 'title_label');
+        dur_lbl.textContent = item[6];
+        box.appendChild(dur_lbl);
+        dur_lbl.setAttribute('class', 'dur_label')
+        play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
+        play.setAttribute('class', 'play_btn')
+        box.appendChild(play)
+        box.setAttribute('class', 'div_box');
+        box.style.left = String(left) + '%';
+        rec_div.appendChild(box);
+        left += 11;
+      }
     }
-    .dur_label
-    {
-      position : absolute;
-      bottom : 3%;
-      right : 3%;
-      color : #141411;
+
+    var mv_div = document.getElementById('mv_div');
+    var index1 = 0;
+    var left1 = 0;
+    mv1.forEach(myFunction1);
+    function myFunction1(item, index1) {
+      var box = document.createElement("div");
+      var play = document.createElement("img");
+      var dur_lbl = document.createElement("label");
+      var title_lbl = document.createElement("label");
+      var like_btn = document.createElement("img");
+      like_btn.setAttribute('class', 'like');
+      like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
+      box.appendChild(like_btn)
+      play.setAttribute('name', item[1])
+      like_btn.setAttribute('name', item[1])
+      title_lbl.textContent = item[0];
+      box.appendChild(title_lbl);
+      title_lbl.setAttribute('class', 'title_label');
+      dur_lbl.textContent = item[6];
+      box.appendChild(dur_lbl);
+      dur_lbl.setAttribute('class', 'dur_label')
+      play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
+      play.setAttribute('class', 'play_btn')
+      box.appendChild(play)
+      box.setAttribute('class', 'div_box');
+      box.style.left = String(left1) + '%';
+      mv_div.appendChild(box);
+      left1 += 11;
     }
-    .title_label
-    {
-      position: absolute;
-      top : 3%;
-      left : 3%;
-      color : #141411;
+
+    var ml_div = document.getElementById('ml_div');
+    var index2 = 0;
+    var left2 = 0;
+    ml1.forEach(myFunction2);
+    function myFunction2(item, index2) {
+      var box = document.createElement("div");
+      var play = document.createElement("img");
+      var dur_lbl = document.createElement("label");
+      var title_lbl = document.createElement("label");
+      var like_btn = document.createElement("img");
+      like_btn.setAttribute('class', 'like');
+      like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
+      box.appendChild(like_btn)
+      play.setAttribute('name', item[1])
+      like_btn.setAttribute('name', item[1])
+      title_lbl.textContent = item[0];
+      box.appendChild(title_lbl);
+      title_lbl.setAttribute('class', 'title_label');
+      dur_lbl.textContent = item[6];
+      box.appendChild(dur_lbl);
+      dur_lbl.setAttribute('class', 'dur_label')
+      play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
+      play.setAttribute('class', 'play_btn')
+      box.appendChild(play)
+      box.setAttribute('class', 'div_box');
+      box.style.left = String(left2) + '%';
+      ml_div.appendChild(box);
+      left2 += 11;
     }
-    .like
-    {
-        position: absolute;
-        bottom: 3%;
-        left : 3%;
-        cursor : pointer;
+
+    var ru_div = document.getElementById('ru_div');
+    var index3 = 0;
+    var left3 = 0;
+    ru1.forEach(myFunction3);
+    function myFunction3(item, index3) {
+      var box = document.createElement("div");
+      var play = document.createElement("img");
+      var dur_lbl = document.createElement("label");
+      var title_lbl = document.createElement("label");
+      var like_btn = document.createElement("img");
+      like_btn.setAttribute('class', 'like');
+      like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
+      box.appendChild(like_btn)
+      play.setAttribute('name', item[1])
+      like_btn.setAttribute('name', item[1])
+      title_lbl.textContent = item[0];
+      box.appendChild(title_lbl);
+      title_lbl.setAttribute('class', 'title_label');
+      dur_lbl.textContent = item[6];
+      box.appendChild(dur_lbl);
+      dur_lbl.setAttribute('class', 'dur_label')
+      play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
+      play.setAttribute('class', 'play_btn')
+      box.appendChild(play)
+      box.setAttribute('class', 'div_box');
+      box.style.left = String(left3) + '%';
+      ru_div.appendChild(box);
+      left3 += 11;
     }
-  </style>
-  <body style = "font-family: Arial; position : absolute; height : 100%; width : 100%; overflow : scroll;">
-    <h1 id = "heading" style = "position : absolute; left : 3%; top : 3%;"></h1>
-    <a style = "position : absolute; right : 4%; top : 2%; font-size : 18px;" href = "/dashboard/manage_prof"> Manage Profile </a>
-    <a style = "position : absolute; right : 4%; top : 6%; font-size : 18px;" href = "/logout"> Log Out </a>
-    <div id = "rec_div" style = "height : 30%; position : absolute; top : 15%; left : 3%; width : 100%;">
-      <!-- Recommend videos -->
-      <h2 style = "color : red; position : absolute; top : 0; left : 0;"> Recommended Videos</h2>
-    </div>
-    <div id = "mv_div" style = "height : 30%; position : absolute; top : 50%; left : 3%; width : 100%;">
-      <!-- Most Liked Videos -->
-      <h2 style = "color : red; position : absolute; top : 0; left : 0;"> Most Viewed Videos</h2>
-    </div>
-    <div id = "ml_div" style = "height : 30%; position : absolute; top : 85%; left : 3%; width : 100%;">
-      <!-- Most Liked Videos -->
-      <h2 style = "color : red; position : absolute; top : 0; left : 0;"> Most Liked Videos</h2>
-    </div>
-    <div id = "ru_div" style = "height : 30%; position : absolute; top : 120%; left : 3%; width : 100%;">
-      <!-- Most Liked Videos -->
-      <h2 style = "color : red; position : absolute; top : 0; left : 0;"> Recently Uploaded Videos</h2>
-    </div>
-    <div id = "now_playing_div" style = "color : red; position : absolute; left : 3%; top : 150%; width : 100%; height : 50%;">
-      <h2 style = "color : red; position : absolute; top : 0; left : 0;"> Now Playing </h2>
-      <video id = "vid_tag" controls autoplay style = "position : absolute; width : 95%; height : 75%; top : 20%;">
-        <source id = "vid_src" type = "video/mp4">
-      </video>
-    </div>
-    <script>
-        // script : get user_name
-
-        var value = "{{ name1 }}";
-
-        var header = document.getElementById('heading');
-        value = value.charAt(0).toUpperCase() + value.slice(1)
-        var res = value.concat("'s Dashboard")
-        console.log("res > dashboard_login : ", res);
-        header.textContent = res;
-    </script>
-    <script>
-        // script : recommend_buffer
-        var rec1 = {{ rec | tojson }};
-        var mv1 = {{ mv | tojson }};
-        var ml1 = {{ ml | tojson }};
-        var ru1 = {{ ru | tojson }};
-
-        console.log("All arrays : \n", rec1, "\n", mv1, "\n", ml1, "\n", ru1, "\n");
-
-        rec1 = JSON.parse(rec1);
-        mv1 = JSON.parse(mv1);
-        ml1 = JSON.parse(ml1);
-        ru1 = JSON.parse(ru1);
-
-        var len = rec1.length;
-        var left = 0;
-        var rec_div = document.getElementById('rec_div');
-        var index = 0;
-        if(rec1.length === 0)
-        {
-          console.log("In len === 0 cond");
-          document.body.removeChild(rec_div);
-          document.getElementById('mv_div').style.top = "15%";
-          document.getElementById('ml_div').style.top = "50%";
-          document.getElementById('ru_div').style.top = "85%";
-          document.getElementById('now_playing_div').style.top = "120%";
+    var play_btn_list = document.querySelectorAll('.play_btn');
+    var index4 = 0;
+    play_btn_list.forEach(change_img_src);
+    function change_img_src(item, index4) {
+      item.onclick = function () {
+        var item_name = item.name
+        // console.log(item_name);
+        var existing_vid = document.getElementById("vid_tag")
+        document.getElementById("now_playing_div").removeChild(existing_vid)
+        var vid_ele = document.createElement("video");
+        vid_ele.controls = true;
+        vid_ele.autoplay = true;
+        vid_ele.setAttribute('id', 'vid_tag')
+        var vid_src = document.createElement("source");
+        vid_src.setAttribute('id', 'vid_src');
+        vid_src.setAttribute('type', 'video/mp4');
+        vid_src.src = '/static/' + item_name;
+        vid_ele.style = "position : absolute; width : 95%; height : 75%; top : 20%;";
+        vid_ele.appendChild(vid_src);
+        document.getElementById('now_playing_div').appendChild(vid_ele)
+        var temp = localStorage.getItem(item_name + '_views');
+        if (temp === null) {
+          localStorage.setItem(item_name + '_views', Number(1));
         }
-        else
-        {
-            rec1.forEach(myFunction);
-            function myFunction(item, index)
-            {
-              var box = document.createElement("div");
-              var play = document.createElement("img");
-              var dur_lbl = document.createElement("label");
-              var title_lbl = document.createElement("label");
-              var like_btn = document.createElement("img");
-              like_btn.setAttribute('class', 'like');
-              like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-              box.appendChild(like_btn)
-              play.setAttribute('name',item[1])
-              like_btn.setAttribute('name',item[1])
-              title_lbl.textContent = item[0];
-              box.appendChild(title_lbl);
-              title_lbl.setAttribute('class', 'title_label');
-              dur_lbl.textContent = item[6];
-              box.appendChild(dur_lbl);
-              dur_lbl.setAttribute('class', 'dur_label')
-              play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
-              play.setAttribute('class','play_btn')
-              box.appendChild(play)
-              box.setAttribute('class','div_box');
-              box.style.left = String(left) + '%';
-              rec_div.appendChild(box);
-              left += 11;
-            }
+        else {
+          localStorage.setItem(item_name + '_views', Number(1) + Number(temp));
         }
+        // console.log(localStorage.getItem(item_name + '_views'))
+      }
+    }
 
-        var mv_div = document.getElementById('mv_div');
-        var index1 = 0;
-        var left1 = 0;
-        mv1.forEach(myFunction1);
-        function myFunction1(item, index1)
-        {
-          var box = document.createElement("div");
-          var play = document.createElement("img");
-          var dur_lbl = document.createElement("label");
-          var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
-          play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
-          title_lbl.textContent = item[0];
-          box.appendChild(title_lbl);
-          title_lbl.setAttribute('class', 'title_label');
-          dur_lbl.textContent = item[6];
-          box.appendChild(dur_lbl);
-          dur_lbl.setAttribute('class', 'dur_label')
-          play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
-          play.setAttribute('class','play_btn')
-          box.appendChild(play)
-          box.setAttribute('class','div_box');
-          box.style.left = String(left1) + '%';
-          mv_div.appendChild(box);
-          left1 += 11;
-        }
+    var like_btn_list = document.querySelectorAll('.like')
+    var index5 = 0;
+    like_btn_list.forEach(liked);
+    function liked(item, index5) {
+      var item_name = item.name;
+      item.onclick = function () {
+        // count part
+        // console.log("liked > item_name : ", item_name);
 
-        var ml_div = document.getElementById('ml_div');
-        var index2 = 0;
-        var left2 = 0;
-        ml1.forEach(myFunction2);
-        function myFunction2(item, index2)
-        {
-          var box = document.createElement("div");
-          var play = document.createElement("img");
-          var dur_lbl = document.createElement("label");
-          var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
-          play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
-          title_lbl.textContent = item[0];
-          box.appendChild(title_lbl);
-          title_lbl.setAttribute('class', 'title_label');
-          dur_lbl.textContent = item[6];
-          box.appendChild(dur_lbl);
-          dur_lbl.setAttribute('class', 'dur_label')
-          play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
-          play.setAttribute('class','play_btn')
-          box.appendChild(play)
-          box.setAttribute('class','div_box');
-          box.style.left = String(left2) + '%';
-          ml_div.appendChild(box);
-          left2 += 11;
-        }
 
-        var ru_div = document.getElementById('ru_div');
-        var index3 = 0;
-        var left3 = 0;
-        ru1.forEach(myFunction3);
-        function myFunction3(item, index3)
-        {
-          var box = document.createElement("div");
-          var play = document.createElement("img");
-          var dur_lbl = document.createElement("label");
-          var title_lbl = document.createElement("label");
-          var like_btn = document.createElement("img");
-          like_btn.setAttribute('class', 'like');
-          like_btn.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png"
-          box.appendChild(like_btn)
-          play.setAttribute('name',item[1])
-          like_btn.setAttribute('name',item[1])
-          title_lbl.textContent = item[0];
-          box.appendChild(title_lbl);
-          title_lbl.setAttribute('class', 'title_label');
-          dur_lbl.textContent = item[6];
-          box.appendChild(dur_lbl);
-          dur_lbl.setAttribute('class', 'dur_label')
-          play.src = "https://img.icons8.com/wired/64/000000/play-button-circled.png";
-          play.setAttribute('class','play_btn')
-          box.appendChild(play)
-          box.setAttribute('class','div_box');
-          box.style.left = String(left3) + '%';
-          ru_div.appendChild(box);
-          left3 += 11;
-        }
-        var play_btn_list = document.querySelectorAll('.play_btn');
-        var index4 = 0;
-        play_btn_list.forEach(change_img_src);
-        function change_img_src(item, index4)
-        {
-          item.onclick = function()
-          {
-            var item_name = item.name
-            console.log(item_name);
-            var existing_vid = document.getElementById("vid_tag")
-            document.getElementById("now_playing_div").removeChild(existing_vid)
-            var vid_ele = document.createElement("video");
-            vid_ele.controls = true;
-            vid_ele.autoplay = true;
-            vid_ele.setAttribute('id','vid_tag')
-            var vid_src = document.createElement("source");
-            vid_src.setAttribute('id','vid_src');
-            vid_src.setAttribute('type','video/mp4');
-            vid_src.src = '/static/' + item_name;
-            vid_ele.style = "position : absolute; width : 95%; height : 75%; top : 20%;";
-            vid_ele.appendChild(vid_src);
-            document.getElementById('now_playing_div').appendChild(vid_ele)
-            var temp = localStorage.getItem(item_name + '_views');
-            if(temp === null)
-            {
-              localStorage.setItem(item_name + '_views', Number(1));
-            }
-            else
-            {
-                localStorage.setItem(item_name + '_views', Number(1) + Number(temp));
-            }
-            console.log(localStorage.getItem(item_name + '_views'))
+        if (item.src === "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png") {
+          item.src = "https://img.icons8.com/material-rounded/24/000000/facebook-like--v1.png";
+          var temp = localStorage.getItem(item.name + "_likes")
+          if (temp === null) {
+            localStorage.setItem(item.name + "_likes", Number(1));
+
+          }
+          else {
+            localStorage.setItem(item.name + "_likes", Number(1) + Number(temp));
           }
         }
+        else {
+          item.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png";
+          var temp = localStorage.getItem(item.name + "_likes")
+          localStorage.setItem(item.name + "_likes", Number(temp) - Number(1));
 
-        var like_btn_list = document.querySelectorAll('.like')
-        var index5 = 0;
-        like_btn_list.forEach(liked);
-        function liked(item, index5)
-        {
-          var item_name = item.name;
-          item.onclick = function()
-          {
-            // count part
-            console.log("liked > item_name : ",item_name);
-
-
-            if(item.src === "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png")
-            {
-              item.src = "https://img.icons8.com/material-rounded/24/000000/facebook-like--v1.png";
-              var temp = localStorage.getItem(item.name + "_likes")
-              if(temp===null)
-              {
-                localStorage.setItem(item.name + "_likes", Number(1));
-
-              }
-              else
-              {
-                localStorage.setItem(item.name + "_likes", Number(1) + Number(temp));
-              }
-            }
-            else
-            {
-              item.src = "https://img.icons8.com/material-outlined/24/000000/facebook-like--v1.png";
-              var temp = localStorage.getItem(item.name + "_likes")
-              localStorage.setItem(item.name + "_likes",  Number(temp) - Number(1));
-
-            }
-            console.log(localStorage.getItem(item.name + "_likes"));
-          }
         }
-    </script>
-  </body>
+        // console.log(localStorage.getItem(item.name + "_likes"));
+      }
+    }
+  </script>
+  <script>
+    //script: logout send stats
+    function sendStats() {
+      xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/updateStats", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      data = ""
+      for (var i = 0; i < localStorage.length; i++){
+        keypair = localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i));
+        alert(keypair)
+        data += keypair + "&";
+      }
+      xhttp.send(data);
+      localStorage.clear();
+    }
+  </script>
+</body>
+
 </html>
