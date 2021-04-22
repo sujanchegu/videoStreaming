@@ -82,13 +82,15 @@ class ConsumerUI:
 
         self.favourites = []
         temp = db.retrievePlaylist(user._email, 'favourites')
-        for vid in temp:
-            self.favourites.append(db.retrieveParticularVideo(vid[0]))
+        if temp:
+            for vid in temp:
+                self.favourites.append(db.retrieveParticularVideo(vid[0]))
 
         self.liked = []
-        temp = db.retrievePlaylist(user._email, 'liked')
-        for vid in temp:
-            self.liked.append(db.retrieveParticularVideo(vid[0]))
+        if temp:
+            temp = db.retrievePlaylist(user._email, 'liked')
+            for vid in temp:
+                self.liked.append(db.retrieveParticularVideo(vid[0]))
 
 
 cons = ConsumerUI()
